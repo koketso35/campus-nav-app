@@ -1,0 +1,2112 @@
+[
+  {
+    "id": "b192",
+    "name": "Biodiversity Lab",
+    "code": "Biodiversity Lab",
+    "category": "academic",
+    "type": "Support",
+    "lat": -23.886199211034405,
+    "lng": 29.740958169276446,
+    "accessible": true
+  },
+  {
+    "id": "b384",
+    "name": "Centre for Global Change",
+    "code": "Centre for Global Change",
+    "category": "academic",
+    "type": "Research Centre",
+    "lat": -23.88311509121236,
+    "lng": 29.74154802005674,
+    "accessible": true
+  },
+  {
+    "id": "b378",
+    "name": "Community Engagement Unit",
+    "code": "Community Engagement Unit",
+    "category": "academic",
+    "type": "Research Centre",
+    "lat": -23.884561885161624,
+    "lng": 29.74126068813171,
+    "accessible": true
+  },
+  {
+    "id": "b380",
+    "name": "Department of Water and Sanitation",
+    "code": "Department of Water and Sanitation",
+    "category": "academic",
+    "type": "Support",
+    "lat": -23.884207266861704,
+    "lng": 29.741457992082655,
+    "accessible": true
+  },
+  {
+    "id": "b194",
+    "name": "Faculty of Science and Agriculture",
+    "code": "Faculty of Science and Agriculture",
+    "category": "academic",
+    "type": "Laboratory",
+    "lat": -23.886273854865397,
+    "lng": 29.741474064631234,
+    "accessible": true
+  },
+  {
+    "id": "b146",
+    "name": "H Block",
+    "code": "H Block",
+    "category": "academic",
+    "type": "Laboratory",
+    "lat": -23.885222262759356,
+    "lng": 29.73832869602576,
+    "accessible": true
+  },
+  {
+    "id": "b145",
+    "name": "H Block Extension",
+    "code": "H Block Extension",
+    "category": "academic",
+    "type": "Laboratory",
+    "lat": -23.884865832724675,
+    "lng": 29.738357133651576,
+    "accessible": true
+  },
+  {
+    "id": "b172",
+    "name": "I Block",
+    "code": "I Block",
+    "category": "academic",
+    "type": "Lecture Hall",
+    "lat": -23.88704823534018,
+    "lng": 29.739164745863707,
+    "accessible": true
+  },
+  {
+    "id": "b173",
+    "name": "J Block",
+    "code": "J Block",
+    "category": "academic",
+    "type": "Lecture Hall",
+    "lat": -23.887374482751436,
+    "lng": 29.739103941712756,
+    "accessible": true
+  },
+  {
+    "id": "b171",
+    "name": "K Block",
+    "code": "K Block",
+    "category": "academic",
+    "type": "Lecture Halls",
+    "lat": -23.88673684347581,
+    "lng": 29.739545804061418,
+    "accessible": true
+  },
+  {
+    "id": "b368",
+    "name": "Language Lab",
+    "code": "Language Lab",
+    "category": "academic",
+    "type": "Computer labs",
+    "lat": -23.887076126923983,
+    "lng": 29.742490152306363,
+    "accessible": true
+  },
+  {
+    "id": "b176",
+    "name": "Library Information Services",
+    "code": "Library Information Services",
+    "category": "academic",
+    "type": "Student Support Services",
+    "lat": -23.887900678363025,
+    "lng": 29.73925761848244,
+    "accessible": true
+  },
+  {
+    "id": "b168",
+    "name": "M Block",
+    "code": "M Block",
+    "category": "academic",
+    "type": "Lecture Halls",
+    "lat": -23.88602596350973,
+    "lng": 29.739045249462727,
+    "accessible": true
+  },
+  {
+    "id": "b191",
+    "name": "Maths Building",
+    "code": "Maths Building",
+    "category": "academic",
+    "type": "Computer Labs",
+    "lat": -23.88666336983531,
+    "lng": 29.740997820175842,
+    "accessible": true
+  },
+  {
+    "id": "b45",
+    "name": "MBI LAB",
+    "code": "MBI LAB",
+    "category": "academic",
+    "type": "Computer Labs",
+    "lat": -23.890963800658835,
+    "lng": 29.735025745006148,
+    "accessible": true
+  },
+  {
+    "id": "b112",
+    "name": "New Cinema Hall (NCH)",
+    "code": "New Cinema Hall (NCH)",
+    "category": "academic",
+    "type": "Lecture Hall",
+    "lat": -23.886535097344815,
+    "lng": 29.737262325744766,
+    "accessible": true
+  },
+  {
+    "id": "b193",
+    "name": "New K Block",
+    "code": "New K Block",
+    "category": "academic",
+    "type": "lecture Hall",
+    "lat": -23.886402450537016,
+    "lng": 29.740561536338383,
+    "accessible": true
+  },
+  {
+    "id": "b186",
+    "name": "New R  Block",
+    "code": "New R  Block",
+    "category": "academic",
+    "type": "Lecture Halls",
+    "lat": -23.888019681986012,
+    "lng": 29.740483732022764,
+    "accessible": true
+  },
+  {
+    "id": "b109",
+    "name": "Old Cinema Hall (OCH)",
+    "code": "Old Cinema Hall (OCH)",
+    "category": "academic",
+    "type": "Lecture Hall",
+    "lat": -23.887342815055888,
+    "lng": 29.737191563413056,
+    "accessible": true
+  },
+  {
+    "id": "b160",
+    "name": "P Block",
+    "code": "P Block",
+    "category": "academic",
+    "type": "Lecture Halls",
+    "lat": -23.88502439798897,
+    "lng": 29.73869022908599,
+    "accessible": true
+  },
+  {
+    "id": "b188",
+    "name": "R Block",
+    "code": "R Block",
+    "category": "academic",
+    "type": "Lecture Halls",
+    "lat": -23.887394281119988,
+    "lng": 29.7404036999225,
+    "accessible": true
+  },
+  {
+    "id": "b447",
+    "name": "R-40",
+    "code": "R-40",
+    "category": "academic",
+    "type": "Conference Hall",
+    "lat": -23.887022152366796,
+    "lng": 29.74052968190841,
+    "accessible": true
+  },
+  {
+    "id": "b201",
+    "name": "T Block",
+    "code": "T Block",
+    "category": "academic",
+    "type": "Lecture halls",
+    "lat": -23.887565323157904,
+    "lng": 29.741195658487044,
+    "accessible": true
+  },
+  {
+    "id": "b452",
+    "name": "VG Skills Lab Nursing",
+    "code": "VG Skills Lab Nursing",
+    "category": "academic",
+    "type": "Laboratory",
+    "lat": -23.884152603316128,
+    "lng": 29.736403041676294,
+    "accessible": true
+  },
+  {
+    "id": "b343",
+    "name": "Water Testing Lab",
+    "code": "Water Testing Lab",
+    "category": "academic",
+    "type": "Laboratory",
+    "lat": -23.88940724632327,
+    "lng": 29.744366603895365,
+    "accessible": true
+  },
+  {
+    "id": "b44",
+    "name": "Agostinho Neto",
+    "code": "MBJ",
+    "category": "residence",
+    "type": "Residence",
+    "lat": -23.891308447968573,
+    "lng": 29.73492613268186,
+    "accessible": true
+  },
+  {
+    "id": "b81",
+    "name": "Amilca Cabral",
+    "code": "VJ",
+    "category": "residence",
+    "type": "Residence",
+    "lat": -23.88399866762297,
+    "lng": 29.734924102986163,
+    "accessible": true
+  },
+  {
+    "id": "b46",
+    "name": "Anton Lembede",
+    "code": "MBI",
+    "category": "residence",
+    "type": "Residence",
+    "lat": -23.890713986505244,
+    "lng": 29.734923480605108,
+    "accessible": true
+  },
+  {
+    "id": "b27",
+    "name": "Barney Molokoane  House",
+    "code": "MF",
+    "category": "residence",
+    "type": "Residence",
+    "lat": -23.888987407258202,
+    "lng": 29.735492325328927,
+    "accessible": true
+  },
+  {
+    "id": "b93",
+    "name": "Bernard Ncube",
+    "code": "VG",
+    "category": "residence",
+    "type": "Residence",
+    "lat": -23.8843887405451,
+    "lng": 29.736304963086848,
+    "accessible": true
+  },
+  {
+    "id": "b78",
+    "name": "Che Guevara",
+    "code": "VK",
+    "category": "residence",
+    "type": "Residence",
+    "lat": -23.885227007455992,
+    "lng": 29.73752863235775,
+    "accessible": true
+  },
+  {
+    "id": "b29",
+    "name": "Chief A lbert Luthuli House",
+    "code": "MG",
+    "category": "residence",
+    "type": "Residence",
+    "lat": -23.88930278044317,
+    "lng": 29.73536431652022,
+    "accessible": true
+  },
+  {
+    "id": "b75",
+    "name": "Chris Hani",
+    "code": "VN",
+    "category": "residence",
+    "type": "Residence",
+    "lat": -23.884983990982754,
+    "lng": 29.734295533452606,
+    "accessible": true
+  },
+  {
+    "id": "b442",
+    "name": "Cuba House",
+    "code": "MH",
+    "category": "residence",
+    "type": "Residence",
+    "lat": -23.888295383546538,
+    "lng": 29.735364813164804,
+    "accessible": true
+  },
+  {
+    "id": "b12",
+    "name": "Cuito Cuanavale",
+    "code": "MBG",
+    "category": "residence",
+    "type": "Residence",
+    "lat": -23.89110866909446,
+    "lng": 29.736069210470934,
+    "accessible": true
+  },
+  {
+    "id": "b41",
+    "name": "David Webster House",
+    "code": "David Webster House",
+    "category": "residence",
+    "type": "Residence",
+    "lat": -23.883763691466392,
+    "lng": 29.736118255136024,
+    "accessible": true
+  },
+  {
+    "id": "b37",
+    "name": "Desmond Tutu",
+    "code": "MB",
+    "category": "residence",
+    "type": "Residence",
+    "lat": -23.88835621243503,
+    "lng": 29.736452761301774,
+    "accessible": true
+  },
+  {
+    "id": "b23",
+    "name": "Dr Rebeiro House",
+    "code": "MC",
+    "category": "residence",
+    "type": "Residence",
+    "lat": -23.8888801173682,
+    "lng": 29.736836111108076,
+    "accessible": true
+  },
+  {
+    "id": "b101",
+    "name": "Ellen Khuzwayo",
+    "code": "VE",
+    "category": "residence",
+    "type": "Residence",
+    "lat": -23.88522988532865,
+    "lng": 29.7355579359608,
+    "accessible": true
+  },
+  {
+    "id": "b449",
+    "name": "Fedics 1",
+    "code": "Fedics 1",
+    "category": "residence",
+    "type": "Residence",
+    "lat": -23.890950770429125,
+    "lng": 29.738951089565237,
+    "accessible": true
+  },
+  {
+    "id": "b446",
+    "name": "Fedics 2",
+    "code": "Fedics 2",
+    "category": "residence",
+    "type": "Residence",
+    "lat": -23.890574138252294,
+    "lng": 29.73934174655504,
+    "accessible": true
+  },
+  {
+    "id": "b129",
+    "name": "Flat A",
+    "code": "Flat A",
+    "category": "residence",
+    "type": "Residence",
+    "lat": -23.886268754581746,
+    "lng": 29.734125116949578,
+    "accessible": true
+  },
+  {
+    "id": "b128",
+    "name": "Flat B",
+    "code": "Flat B",
+    "category": "residence",
+    "type": "Residence",
+    "lat": -23.886010819979987,
+    "lng": 29.734065543915282,
+    "accessible": true
+  },
+  {
+    "id": "b127",
+    "name": "Flat C",
+    "code": "Flat C",
+    "category": "residence",
+    "type": "Residence",
+    "lat": -23.885659039811753,
+    "lng": 29.73399193929558,
+    "accessible": true
+  },
+  {
+    "id": "b455",
+    "name": "Frederick Engels",
+    "code": "VI",
+    "category": "residence",
+    "type": "Residence",
+    "lat": -23.883763691466392,
+    "lng": 29.736118255136024,
+    "accessible": true
+  },
+  {
+    "id": "b28",
+    "name": "Gaddaffi  House",
+    "code": "MO",
+    "category": "residence",
+    "type": "Residence",
+    "lat": -23.888987407258202,
+    "lng": 29.735492325328927,
+    "accessible": true
+  },
+  {
+    "id": "b90",
+    "name": "Getrude Shope",
+    "code": "VF",
+    "category": "residence",
+    "type": "Residence",
+    "lat": -23.884331732657948,
+    "lng": 29.737266448955843,
+    "accessible": true
+  },
+  {
+    "id": "b99",
+    "name": "Hector Peterson",
+    "code": "VC",
+    "category": "residence",
+    "type": "Residence",
+    "lat": -23.885439413039926,
+    "lng": 29.736394871316694,
+    "accessible": true
+  },
+  {
+    "id": "b341",
+    "name": "House 1",
+    "code": "House 1",
+    "category": "residence",
+    "type": "Residence",
+    "lat": -23.888849594158675,
+    "lng": 29.741673300622665,
+    "accessible": true
+  },
+  {
+    "id": "b273",
+    "name": "House 10",
+    "code": "House 10",
+    "category": "residence",
+    "type": "Residence",
+    "lat": -23.89305373964933,
+    "lng": 29.74168372960638,
+    "accessible": true
+  },
+  {
+    "id": "b271",
+    "name": "House 11",
+    "code": "House 11",
+    "category": "residence",
+    "type": "Residence",
+    "lat": -23.89329415826478,
+    "lng": 29.741709214905,
+    "accessible": true
+  },
+  {
+    "id": "b267",
+    "name": "House 12",
+    "code": "House 12",
+    "category": "residence",
+    "type": "Residence",
+    "lat": -23.893722434576983,
+    "lng": 29.741374620084873,
+    "accessible": true
+  },
+  {
+    "id": "b269",
+    "name": "House 13",
+    "code": "House 13",
+    "category": "residence",
+    "type": "Residence",
+    "lat": -23.893753602082,
+    "lng": 29.740854728685377,
+    "accessible": true
+  },
+  {
+    "id": "b263",
+    "name": "House 14",
+    "code": "House 14",
+    "category": "residence",
+    "type": "Residence",
+    "lat": -23.894216795060316,
+    "lng": 29.740667164220657,
+    "accessible": true
+  },
+  {
+    "id": "b265",
+    "name": "House 15",
+    "code": "House 15",
+    "category": "residence",
+    "type": "Residence",
+    "lat": -23.894154357667393,
+    "lng": 29.741186397999353,
+    "accessible": true
+  },
+  {
+    "id": "b243",
+    "name": "House 16",
+    "code": "House 16",
+    "category": "residence",
+    "type": "Residence",
+    "lat": -23.894717945532403,
+    "lng": 29.740807021143603,
+    "accessible": true
+  },
+  {
+    "id": "b245",
+    "name": "House 17",
+    "code": "House 17",
+    "category": "residence",
+    "type": "Residence",
+    "lat": -23.894848025667425,
+    "lng": 29.74035385483855,
+    "accessible": true
+  },
+  {
+    "id": "b247",
+    "name": "House 18",
+    "code": "House 18",
+    "category": "residence",
+    "type": "Residence",
+    "lat": -23.894992794000075,
+    "lng": 29.73977851432468,
+    "accessible": true
+  },
+  {
+    "id": "b325",
+    "name": "House 2",
+    "code": "House 2",
+    "category": "residence",
+    "type": "Residence",
+    "lat": -23.889643176943366,
+    "lng": 29.742254798717273,
+    "accessible": true
+  },
+  {
+    "id": "b250",
+    "name": "House 20",
+    "code": "House 20",
+    "category": "residence",
+    "type": "Residence",
+    "lat": -23.89446379041403,
+    "lng": 29.73927062551874,
+    "accessible": true
+  },
+  {
+    "id": "b252",
+    "name": "House 21",
+    "code": "House 21",
+    "category": "residence",
+    "type": "Residence",
+    "lat": -23.89405591471419,
+    "lng": 29.738636006954156,
+    "accessible": true
+  },
+  {
+    "id": "b253",
+    "name": "House 22",
+    "code": "House 22",
+    "category": "residence",
+    "type": "Residence",
+    "lat": -23.893750786045267,
+    "lng": 29.739082081104083,
+    "accessible": true
+  },
+  {
+    "id": "b255",
+    "name": "House 23",
+    "code": "House 23",
+    "category": "residence",
+    "type": "Residence",
+    "lat": -23.893767035419664,
+    "lng": 29.739601012315923,
+    "accessible": true
+  },
+  {
+    "id": "b257",
+    "name": "House 24",
+    "code": "House 24",
+    "category": "residence",
+    "type": "Residence",
+    "lat": -23.893450709267587,
+    "lng": 29.739946738798206,
+    "accessible": true
+  },
+  {
+    "id": "b259",
+    "name": "House 25",
+    "code": "House 25",
+    "category": "residence",
+    "type": "Residence",
+    "lat": -23.893109618680906,
+    "lng": 29.73995315684372,
+    "accessible": true
+  },
+  {
+    "id": "b261",
+    "name": "House 26",
+    "code": "House 26",
+    "category": "residence",
+    "type": "Residence",
+    "lat": -23.89266727451759,
+    "lng": 29.739848567648973,
+    "accessible": true
+  },
+  {
+    "id": "b283",
+    "name": "House 27",
+    "code": "House 27",
+    "category": "residence",
+    "type": "Residence",
+    "lat": -23.891929447578235,
+    "lng": 29.73999972372225,
+    "accessible": true
+  },
+  {
+    "id": "b284",
+    "name": "House 28",
+    "code": "House 28",
+    "category": "residence",
+    "type": "Residence",
+    "lat": -23.89187913665148,
+    "lng": 29.73983875776781,
+    "accessible": true
+  },
+  {
+    "id": "b285",
+    "name": "House 29",
+    "code": "House 29",
+    "category": "residence",
+    "type": "Residence",
+    "lat": -23.891778270928583,
+    "lng": 29.739530430911223,
+    "accessible": true
+  },
+  {
+    "id": "b322",
+    "name": "House 3",
+    "code": "House 3",
+    "category": "residence",
+    "type": "Residence",
+    "lat": -23.890032595746657,
+    "lng": 29.74199424194949,
+    "accessible": true
+  },
+  {
+    "id": "b288",
+    "name": "House 30",
+    "code": "House 30",
+    "category": "residence",
+    "type": "Residence",
+    "lat": -23.891122293541613,
+    "lng": 29.73965269375558,
+    "accessible": true
+  },
+  {
+    "id": "b287",
+    "name": "House 31",
+    "code": "House 31",
+    "category": "residence",
+    "type": "Residence",
+    "lat": -23.891157999886666,
+    "lng": 29.739755512422153,
+    "accessible": true
+  },
+  {
+    "id": "b329",
+    "name": "House 32",
+    "code": "House 32",
+    "category": "residence",
+    "type": "Residence",
+    "lat": -23.89001981138528,
+    "lng": 29.74060588249968,
+    "accessible": true
+  },
+  {
+    "id": "b328",
+    "name": "House 33",
+    "code": "House 33",
+    "category": "residence",
+    "type": "Residence",
+    "lat": -23.890016370868093,
+    "lng": 29.74027239628511,
+    "accessible": true
+  },
+  {
+    "id": "b330",
+    "name": "House 34",
+    "code": "House 34",
+    "category": "residence",
+    "type": "Residence",
+    "lat": -23.88977872541873,
+    "lng": 29.74061781026357,
+    "accessible": true
+  },
+  {
+    "id": "b235",
+    "name": "House 36",
+    "code": "House 36",
+    "category": "residence",
+    "type": "Residence",
+    "lat": -23.889640434407127,
+    "lng": 29.739601047596615,
+    "accessible": true
+  },
+  {
+    "id": "b237",
+    "name": "House 37",
+    "code": "House 37",
+    "category": "residence",
+    "type": "Residence",
+    "lat": -23.889930098723873,
+    "lng": 29.739671793836592,
+    "accessible": true
+  },
+  {
+    "id": "b241",
+    "name": "House 38",
+    "code": "House 38",
+    "category": "residence",
+    "type": "Residence",
+    "lat": -23.890248512364074,
+    "lng": 29.739709124651437,
+    "accessible": true
+  },
+  {
+    "id": "b240",
+    "name": "House 39",
+    "code": "House 39",
+    "category": "residence",
+    "type": "Residence",
+    "lat": -23.890463430612957,
+    "lng": 29.73976128517491,
+    "accessible": true
+  },
+  {
+    "id": "b305",
+    "name": "House 4",
+    "code": "House 4",
+    "category": "residence",
+    "type": "Residence",
+    "lat": -23.890507751727412,
+    "lng": 29.741837558582315,
+    "accessible": true
+  },
+  {
+    "id": "b445",
+    "name": "House 40",
+    "code": "House 40",
+    "category": "residence",
+    "type": "Residence",
+    "lat": -23.89058305847173,
+    "lng": 29.73919223731824,
+    "accessible": true
+  },
+  {
+    "id": "b281",
+    "name": "House 41",
+    "code": "House 41",
+    "category": "residence",
+    "type": "Residence",
+    "lat": -23.891665284631912,
+    "lng": 29.739024520510004,
+    "accessible": true
+  },
+  {
+    "id": "b279",
+    "name": "House 42",
+    "code": "House 42",
+    "category": "residence",
+    "type": "Residence",
+    "lat": -23.89226050400732,
+    "lng": 29.738957230831225,
+    "accessible": true
+  },
+  {
+    "id": "b277",
+    "name": "House 43",
+    "code": "House 43",
+    "category": "residence",
+    "type": "Residence",
+    "lat": -23.892536944235015,
+    "lng": 29.739087119052147,
+    "accessible": true
+  },
+  {
+    "id": "b286",
+    "name": "House 44",
+    "code": "House 44",
+    "category": "residence",
+    "type": "Residence",
+    "lat": -23.89144207657897,
+    "lng": 29.739788718112464,
+    "accessible": true
+  },
+  {
+    "id": "b303",
+    "name": "House 5",
+    "code": "House 5",
+    "category": "residence",
+    "type": "Residence",
+    "lat": -23.890983547131523,
+    "lng": 29.74182037764938,
+    "accessible": true
+  },
+  {
+    "id": "b292",
+    "name": "House 6",
+    "code": "House 6",
+    "category": "residence",
+    "type": "Residence",
+    "lat": -23.89136998623203,
+    "lng": 29.74137603440946,
+    "accessible": true
+  },
+  {
+    "id": "b294",
+    "name": "House 7",
+    "code": "House 7",
+    "category": "residence",
+    "type": "Residence",
+    "lat": -23.89073807123428,
+    "lng": 29.741025889084458,
+    "accessible": true
+  },
+  {
+    "id": "b289",
+    "name": "House 8",
+    "code": "House 8",
+    "category": "residence",
+    "type": "Residence",
+    "lat": -23.891911976735283,
+    "lng": 29.74185697394839,
+    "accessible": true
+  },
+  {
+    "id": "b275",
+    "name": "House 9",
+    "code": "House 9",
+    "category": "residence",
+    "type": "Residence",
+    "lat": -23.89265900368565,
+    "lng": 29.741716229407594,
+    "accessible": true
+  },
+  {
+    "id": "b97",
+    "name": "Khanya House",
+    "code": "VA",
+    "category": "residence",
+    "type": "Residence",
+    "lat": -23.885227007455992,
+    "lng": 29.73752863235775,
+    "accessible": true
+  },
+  {
+    "id": "b42",
+    "name": "Khotso House",
+    "code": "MBK",
+    "category": "residence",
+    "type": "Residence",
+    "lat": -23.891934516111302,
+    "lng": 29.734884110954695,
+    "accessible": true
+  },
+  {
+    "id": "b16",
+    "name": "Kofifi",
+    "code": "MBE",
+    "category": "residence",
+    "type": "Residence",
+    "lat": -23.890090775679795,
+    "lng": 29.736231111226772,
+    "accessible": true
+  },
+  {
+    "id": "b50",
+    "name": "Kwame Nkurumah",
+    "code": "MBB",
+    "category": "residence",
+    "type": "Residence",
+    "lat": -23.889704518874787,
+    "lng": 29.73481550615136,
+    "accessible": true
+  },
+  {
+    "id": "b15",
+    "name": "Lilian Nggoyi",
+    "code": "MBF",
+    "category": "residence",
+    "type": "Residence",
+    "lat": -23.89057841033615,
+    "lng": 29.736103847608998,
+    "accessible": true
+  },
+  {
+    "id": "b25",
+    "name": "Lusaka Heights",
+    "code": "ME",
+    "category": "residence",
+    "type": "Residence",
+    "lat": -23.889100271396927,
+    "lng": 29.73609497664011,
+    "accessible": true
+  },
+  {
+    "id": "b20",
+    "name": "Madiba Heights",
+    "code": "MBA",
+    "category": "residence",
+    "type": "Residence",
+    "lat": -23.889334943109976,
+    "lng": 29.736639019166823,
+    "accessible": true
+  },
+  {
+    "id": "b85",
+    "name": "Martin Luther King",
+    "code": "VH",
+    "category": "residence",
+    "type": "Residence",
+    "lat": -23.88376512471096,
+    "lng": 29.737018595921526,
+    "accessible": true
+  },
+  {
+    "id": "b440",
+    "name": "Mkhonto Wesizwe House",
+    "code": "MK",
+    "category": "residence",
+    "type": "Residence",
+    "lat": -23.888515000048923,
+    "lng": 29.734653498584894,
+    "accessible": true
+  },
+  {
+    "id": "b33",
+    "name": "Moses Kotane HOUSE",
+    "code": "MI",
+    "category": "residence",
+    "type": "Residence",
+    "lat": -23.888905296672103,
+    "lng": 29.73500069551115,
+    "accessible": true
+  },
+  {
+    "id": "b117",
+    "name": "Moshobane House",
+    "code": "Moshobane House",
+    "category": "residence",
+    "type": "Residence",
+    "lat": -23.88690861455094,
+    "lng": 29.736410375675828,
+    "accessible": true
+  },
+  {
+    "id": "b51",
+    "name": "Moshoeshoe House",
+    "code": "ML",
+    "category": "residence",
+    "type": "Residence",
+    "lat": -23.8895027943337,
+    "lng": 29.734633600376153,
+    "accessible": true
+  },
+  {
+    "id": "b1",
+    "name": "Nkandla House",
+    "code": "MBH",
+    "category": "residence",
+    "type": "Residence",
+    "lat": -23.892017034847253,
+    "lng": 29.73574730028885,
+    "accessible": true
+  },
+  {
+    "id": "b64",
+    "name": "Oliver Tambo",
+    "code": "Oliver Tambo",
+    "category": "residence",
+    "type": "Residance",
+    "lat": -23.88991859692375,
+    "lng": 29.73378510076243,
+    "accessible": true
+  },
+  {
+    "id": "b121",
+    "name": "Onkgoposte TIro House",
+    "code": "Onkgopotse Tiro House",
+    "category": "residence",
+    "type": "Residence",
+    "lat": -23.88698017487987,
+    "lng": 29.735567646016925,
+    "accessible": true
+  },
+  {
+    "id": "b68",
+    "name": "Residence Office",
+    "code": "Residence Office",
+    "category": "residence",
+    "type": "Residence Admistrative Services",
+    "lat": -23.88497942241234,
+    "lng": 29.736040791176823,
+    "accessible": true
+  },
+  {
+    "id": "b94",
+    "name": "Residence Office",
+    "code": "Residence Office",
+    "category": "residence",
+    "type": "Residence Admistrative",
+    "lat": -23.88497942241234,
+    "lng": 29.736040791176823,
+    "accessible": true
+  },
+  {
+    "id": "b53",
+    "name": "Robert Sobukwe",
+    "code": "Robert Sobukwe",
+    "category": "residence",
+    "type": "Residence",
+    "lat": -23.891982151207312,
+    "lng": 29.733836387049998,
+    "accessible": true
+  },
+  {
+    "id": "b39",
+    "name": "Ruth First House",
+    "code": "MM",
+    "category": "residence",
+    "type": "Residence",
+    "lat": -23.88853682301543,
+    "lng": 29.73691321351082,
+    "accessible": true
+  },
+  {
+    "id": "b73",
+    "name": "Samora Machel",
+    "code": "VL",
+    "category": "residence",
+    "type": "Residence",
+    "lat": -23.883939203136762,
+    "lng": 29.73404943451242,
+    "accessible": true
+  },
+  {
+    "id": "b96",
+    "name": "Sekhukhune  House",
+    "code": "VD",
+    "category": "residence",
+    "type": "Residence",
+    "lat": -23.885023920813374,
+    "lng": 29.736763066595657,
+    "accessible": true
+  },
+  {
+    "id": "b98",
+    "name": "Shaka House",
+    "code": "VB",
+    "category": "residence",
+    "type": "Residence",
+    "lat": -23.88563346247252,
+    "lng": 29.73710612807055,
+    "accessible": true
+  },
+  {
+    "id": "b26",
+    "name": "Sol Plaatjie House",
+    "code": "MN",
+    "category": "residence",
+    "type": "Residence",
+    "lat": -23.888755438593304,
+    "lng": 29.736188400813052,
+    "accessible": true
+  },
+  {
+    "id": "b55",
+    "name": "Somafco",
+    "code": "MBL",
+    "category": "residence",
+    "type": "Residence",
+    "lat": -23.89046040470293,
+    "lng": 29.734006642812385,
+    "accessible": true
+  },
+  {
+    "id": "b296",
+    "name": "Stellenbosch",
+    "code": "Block 4",
+    "category": "residence",
+    "type": "Residence",
+    "lat": -23.89073723261062,
+    "lng": 29.740395154097936,
+    "accessible": true
+  },
+  {
+    "id": "b302",
+    "name": "Stellenbosch",
+    "code": "Block 3",
+    "category": "residence",
+    "type": "Residence",
+    "lat": -23.89032902533954,
+    "lng": 29.740632815132336,
+    "accessible": true
+  },
+  {
+    "id": "b336",
+    "name": "Stellenbosch",
+    "code": "Block 2",
+    "category": "residence",
+    "type": "Residence",
+    "lat": -23.889273738630518,
+    "lng": 29.741219553208587,
+    "accessible": true
+  },
+  {
+    "id": "b340",
+    "name": "Stellenbosch",
+    "code": "Block 1",
+    "category": "residence",
+    "type": "Residence",
+    "lat": -23.888725290954014,
+    "lng": 29.741024015183438,
+    "accessible": true
+  },
+  {
+    "id": "b48",
+    "name": "Steve Biko",
+    "code": "MBC",
+    "category": "residence",
+    "type": "Residence",
+    "lat": -23.890147976875625,
+    "lng": 29.73474795730046,
+    "accessible": true
+  },
+  {
+    "id": "b441",
+    "name": "Trevor Huddles House",
+    "code": "MP",
+    "category": "residence",
+    "type": "Residence",
+    "lat": -23.888566116047542,
+    "lng": 29.73510868243841,
+    "accessible": true
+  },
+  {
+    "id": "b19",
+    "name": "Tsietsi Mashinini",
+    "code": "MBD",
+    "category": "residence",
+    "type": "Residence",
+    "lat": -23.88973858724678,
+    "lng": 29.73646616162006,
+    "accessible": true
+  },
+  {
+    "id": "b40",
+    "name": "Zeph Mothopeng",
+    "code": "MD",
+    "category": "residence",
+    "type": "Residence",
+    "lat": -23.88815228480283,
+    "lng": 29.737169051314652,
+    "accessible": true
+  },
+  {
+    "id": "b155",
+    "name": "A Block",
+    "code": "A Block",
+    "category": "support",
+    "type": "Administrative Services",
+    "lat": -23.887768312286266,
+    "lng": 29.738035855788976,
+    "accessible": true
+  },
+  {
+    "id": "b307",
+    "name": "AquaCulture",
+    "code": "AquaCulture",
+    "category": "support",
+    "type": "Support",
+    "lat": -23.89156329429826,
+    "lng": 29.742548569779863,
+    "accessible": true
+  },
+  {
+    "id": "b153",
+    "name": "B Block",
+    "code": "B Block",
+    "category": "support",
+    "type": "Student support services",
+    "lat": -23.887088799177103,
+    "lng": 29.73832386366444,
+    "accessible": true
+  },
+  {
+    "id": "b195",
+    "name": "Biochemistry and Microbiology",
+    "code": "Biochemistry and Microbiology",
+    "category": "support",
+    "type": "Support",
+    "lat": -23.885916702489435,
+    "lng": 29.74127015467483,
+    "accessible": true
+  },
+  {
+    "id": "b152",
+    "name": "C Block",
+    "code": "C Block",
+    "category": "support",
+    "type": "Support",
+    "lat": -23.886754500387475,
+    "lng": 29.73831566260415,
+    "accessible": true
+  },
+  {
+    "id": "b443",
+    "name": "Campus Control Office",
+    "code": "Campus Control Office",
+    "category": "support",
+    "type": "Security Services",
+    "lat": -23.889490271824585,
+    "lng": 29.740301617422,
+    "accessible": true
+  },
+  {
+    "id": "b389",
+    "name": "Centre for Rural and Community Empowerment",
+    "code": "Centre for Rural and Community Empowerment",
+    "category": "support",
+    "type": "Support",
+    "lat": -23.884397304726278,
+    "lng": 29.74224059540919,
+    "accessible": true
+  },
+  {
+    "id": "b386",
+    "name": "Creche",
+    "code": "Creche",
+    "category": "support",
+    "type": "Support",
+    "lat": -23.883078522509713,
+    "lng": 29.74234610015421,
+    "accessible": true
+  },
+  {
+    "id": "b151",
+    "name": "D Block",
+    "code": "D Block",
+    "category": "support",
+    "type": "Student Support Serveices",
+    "lat": -23.88646861564974,
+    "lng": 29.738309419910127,
+    "accessible": true
+  },
+  {
+    "id": "b448",
+    "name": "DMST",
+    "code": "DMST",
+    "category": "support",
+    "type": "Support",
+    "lat": -23.887366388339547,
+    "lng": 29.74084198712272,
+    "accessible": true
+  },
+  {
+    "id": "b149",
+    "name": "E Block",
+    "code": "E Block",
+    "category": "support",
+    "type": "Support",
+    "lat": -23.886129050160665,
+    "lng": 29.738317731209793,
+    "accessible": true
+  },
+  {
+    "id": "b150",
+    "name": "E block greenhouse",
+    "code": "E block greenhouse",
+    "category": "support",
+    "type": "Support",
+    "lat": -23.886032605325173,
+    "lng": 29.73857244536333,
+    "accessible": true
+  },
+  {
+    "id": "b350",
+    "name": "EDU SCIENCE (Botanical garden)",
+    "code": "EDU SCIENCE (Botanical garden)",
+    "category": "support",
+    "type": "Support",
+    "lat": -23.88841683071121,
+    "lng": 29.7443139289441,
+    "accessible": true
+  },
+  {
+    "id": "b148",
+    "name": "F Block",
+    "code": "F Block",
+    "category": "support",
+    "type": "Support",
+    "lat": -23.885814627481363,
+    "lng": 29.738294320208105,
+    "accessible": true
+  },
+  {
+    "id": "b147",
+    "name": "G Block",
+    "code": "G Block",
+    "category": "support",
+    "type": "Support",
+    "lat": -23.885525090508473,
+    "lng": 29.738274970798443,
+    "accessible": true
+  },
+  {
+    "id": "b143",
+    "name": "Gate 0",
+    "code": "Gate 0",
+    "category": "support",
+    "type": "Entrance",
+    "lat": -23.880366045435327,
+    "lng": 29.74096031145133,
+    "accessible": true
+  },
+  {
+    "id": "b142",
+    "name": "Gate 1",
+    "code": "Gate 1",
+    "category": "support",
+    "type": "Main Entrance",
+    "lat": -23.880749654322596,
+    "lng": 29.738532063613796,
+    "accessible": true
+  },
+  {
+    "id": "b133",
+    "name": "Gate 2",
+    "code": "Gate 2",
+    "category": "support",
+    "type": "Pedastrian Entrance",
+    "lat": -23.88696312905519,
+    "lng": 29.73427853504885,
+    "accessible": true
+  },
+  {
+    "id": "b432",
+    "name": "Gate 3",
+    "code": "Gate 3",
+    "category": "support",
+    "type": "Support",
+    "lat": -23.89254776676242,
+    "lng": 29.73366717590656,
+    "accessible": true
+  },
+  {
+    "id": "b130",
+    "name": "Generators",
+    "code": "Generators",
+    "category": "support",
+    "type": "Support",
+    "lat": -23.8864921281496,
+    "lng": 29.734138097231487,
+    "accessible": true
+  },
+  {
+    "id": "b177",
+    "name": "Graphics and Printing",
+    "code": "Graphics and Printing",
+    "category": "support",
+    "type": "Support",
+    "lat": -23.887900077130002,
+    "lng": 29.73896109057719,
+    "accessible": true
+  },
+  {
+    "id": "b66",
+    "name": "Health Centre",
+    "code": "Health Centre",
+    "category": "support",
+    "type": "Medical Services",
+    "lat": -23.88774853598592,
+    "lng": 29.73498720555687,
+    "accessible": true
+  },
+  {
+    "id": "b47",
+    "name": "Heat Pump Station",
+    "code": "Heat Pump Station",
+    "category": "support",
+    "type": "Support",
+    "lat": -23.89065265003537,
+    "lng": 29.73538556614607,
+    "accessible": true
+  },
+  {
+    "id": "b453",
+    "name": "Heat Pump Station",
+    "code": "Heat Pump Station",
+    "category": "support",
+    "type": "Support",
+    "lat": -23.884220983701496,
+    "lng": 29.73596941364542,
+    "accessible": true
+  },
+  {
+    "id": "b156",
+    "name": "Information and Communication Technology",
+    "code": "Information and Communication Technology",
+    "category": "support",
+    "type": "Technical Services",
+    "lat": -23.887821909329183,
+    "lng": 29.738549609193974,
+    "accessible": true
+  },
+  {
+    "id": "b170",
+    "name": "L Block",
+    "code": "L Block",
+    "category": "support",
+    "type": "Support",
+    "lat": -23.886377098353485,
+    "lng": 29.73906034182827,
+    "accessible": true
+  },
+  {
+    "id": "b175",
+    "name": "Lapologa",
+    "code": "Lapologa",
+    "category": "support",
+    "type": "Student Support Services",
+    "lat": -23.887730452535152,
+    "lng": 29.73912390614955,
+    "accessible": true
+  },
+  {
+    "id": "b169",
+    "name": "N Block",
+    "code": "N Block",
+    "category": "support",
+    "type": "Support",
+    "lat": -23.885690260047898,
+    "lng": 29.739436757088956,
+    "accessible": true
+  },
+  {
+    "id": "b444",
+    "name": "O Block",
+    "code": "O Block",
+    "category": "support",
+    "type": "Support",
+    "lat": -23.88536724367779,
+    "lng": 29.739054167274414,
+    "accessible": true
+  },
+  {
+    "id": "b179",
+    "name": "Onkgopotse Tiro Hall",
+    "code": "Onkgopotse Tiro Hall",
+    "category": "support",
+    "type": "Support",
+    "lat": -23.88757732319536,
+    "lng": 29.739941308169705,
+    "accessible": true
+  },
+  {
+    "id": "b456",
+    "name": "Optrimetric Clinic",
+    "code": "Optrimetric Clinic",
+    "category": "support",
+    "type": "Eyes Medical Services",
+    "lat": -23.88404398823456,
+    "lng": 29.737313138193013,
+    "accessible": true
+  },
+  {
+    "id": "b451",
+    "name": "Perfoming Arts Centre",
+    "code": "Perfoming Arts Centre",
+    "category": "support",
+    "type": "Performing Arts Cemtre",
+    "lat": -23.88879924954407,
+    "lng": 29.73880931841648,
+    "accessible": true
+  },
+  {
+    "id": "b196",
+    "name": "Q Block",
+    "code": "Q Block",
+    "category": "support",
+    "type": "Support",
+    "lat": -23.885949585979947,
+    "lng": 29.740570666252598,
+    "accessible": true
+  },
+  {
+    "id": "b115",
+    "name": "Radio Turf",
+    "code": "Radio Turf",
+    "category": "support",
+    "type": "Media and Communication Services",
+    "lat": -23.886941853439343,
+    "lng": 29.73744072380204,
+    "accessible": true
+  },
+  {
+    "id": "b102",
+    "name": "Reakgona Disability Centre (RDC)",
+    "code": "Reakgona Disability Centre (RDC)",
+    "category": "support",
+    "type": "Student Support Services",
+    "lat": -23.88616456419861,
+    "lng": 29.73758719907788,
+    "accessible": true
+  },
+  {
+    "id": "b110",
+    "name": "Restroom",
+    "code": "Restroom",
+    "category": "support",
+    "type": "Restroom",
+    "lat": -23.886450824167852,
+    "lng": 29.7426669473488,
+    "accessible": true
+  },
+  {
+    "id": "b369",
+    "name": "Restroom",
+    "code": "Restroom",
+    "category": "support",
+    "type": "Restrooms",
+    "lat": -23.886450824167852,
+    "lng": 29.7426669473488,
+    "accessible": true
+  },
+  {
+    "id": "b140",
+    "name": "Restrooms",
+    "code": "Restrooms",
+    "category": "support",
+    "type": "Restrooms",
+    "lat": -23.887267760305768,
+    "lng": 29.73732139639426,
+    "accessible": true
+  },
+  {
+    "id": "b450",
+    "name": "S Block",
+    "code": "S Block",
+    "category": "support",
+    "type": "Financial Aid Services",
+    "lat": -23.888700097011963,
+    "lng": 29.738547831084528,
+    "accessible": true
+  },
+  {
+    "id": "b124",
+    "name": "Storage",
+    "code": "Storage",
+    "category": "support",
+    "type": "Support",
+    "lat": -23.886110268579454,
+    "lng": 29.73372802268032,
+    "accessible": true
+  },
+  {
+    "id": "b208",
+    "name": "Stores",
+    "code": "Stores",
+    "category": "support",
+    "type": "Store room",
+    "lat": -23.889098663007665,
+    "lng": 29.739469490175715,
+    "accessible": true
+  },
+  {
+    "id": "b116",
+    "name": "Student Centre",
+    "code": "Student Centre",
+    "category": "support",
+    "type": "Student support servrices",
+    "lat": -23.886925712386173,
+    "lng": 29.73753717969707,
+    "accessible": true
+  },
+  {
+    "id": "b214",
+    "name": "Technical Sevices",
+    "code": "Technical Sevices",
+    "category": "support",
+    "type": "Technical services",
+    "lat": -23.889701861938743,
+    "lng": 29.73848004914168,
+    "accessible": true
+  },
+  {
+    "id": "b377",
+    "name": "TV White Space",
+    "code": "TV White Space",
+    "category": "support",
+    "type": "Student support",
+    "lat": -23.8850535642347,
+    "lng": 29.740685345496274,
+    "accessible": true
+  },
+  {
+    "id": "b200",
+    "name": "U Block",
+    "code": "U Block",
+    "category": "support",
+    "type": "Support",
+    "lat": -23.885467150738297,
+    "lng": 29.74053325620759,
+    "accessible": true
+  },
+  {
+    "id": "b404",
+    "name": "Village 1",
+    "code": "Village 1",
+    "category": "support",
+    "type": "Support",
+    "lat": -23.891067404284204,
+    "lng": 29.745827285180354,
+    "accessible": true
+  },
+  {
+    "id": "b403",
+    "name": "Village 2",
+    "code": "Village 2",
+    "category": "support",
+    "type": "Support",
+    "lat": -23.892124882018084,
+    "lng": 29.74583529265262,
+    "accessible": true
+  },
+  {
+    "id": "b405",
+    "name": "Village 3",
+    "code": "Village 3",
+    "category": "support",
+    "type": "Support",
+    "lat": -23.890860329616213,
+    "lng": 29.74718278709985,
+    "accessible": true
+  },
+  {
+    "id": "b402",
+    "name": "Village 4",
+    "code": "Village 4",
+    "category": "support",
+    "type": "Support",
+    "lat": -23.891925848797428,
+    "lng": 29.74731440121247,
+    "accessible": true
+  },
+  {
+    "id": "b406",
+    "name": "Village 5",
+    "code": "Village 5",
+    "category": "support",
+    "type": "Support",
+    "lat": -23.890892838027845,
+    "lng": 29.748589932485583,
+    "accessible": true
+  },
+  {
+    "id": "b401",
+    "name": "Village 6",
+    "code": "Village 6",
+    "category": "support",
+    "type": "Support",
+    "lat": -23.89212028245668,
+    "lng": 29.74858184732049,
+    "accessible": true
+  },
+  {
+    "id": "b353",
+    "name": "ZOO",
+    "code": "ZOO",
+    "category": "support",
+    "type": "zoo",
+    "lat": -23.888838966540767,
+    "lng": 29.743275433573558,
+    "accessible": true
+  },
+  {
+    "id": "b108",
+    "name": "Boxing Gym",
+    "code": "Boxing Gym",
+    "category": "recreation",
+    "type": "Sports",
+    "lat": -23.887293193564943,
+    "lng": 29.737040266091867,
+    "accessible": true
+  },
+  {
+    "id": "b111",
+    "name": "Building 55",
+    "code": "",
+    "category": "recreation",
+    "type": "Recreational",
+    "lat": -23.88691000295918,
+    "lng": 29.736914202990274,
+    "accessible": true
+  },
+  {
+    "id": "b141",
+    "name": "Change Rooms",
+    "code": "Change Rooms",
+    "category": "recreation",
+    "type": "Sport Changing rooms",
+    "lat": -23.881495732582202,
+    "lng": 29.734989334647032,
+    "accessible": true
+  },
+  {
+    "id": "b454",
+    "name": "Matsiri Park",
+    "code": "Matsiri Park",
+    "category": "recreation",
+    "type": "Recreational",
+    "lat": -23.894434292802714,
+    "lng": 29.738651680078963,
+    "accessible": true
+  },
+  {
+    "id": "b139",
+    "name": "Oscar Mpetha Entrarnce",
+    "code": "Oscar Mpetha Entrarnce",
+    "category": "recreation",
+    "type": "Sports Ground",
+    "lat": -23.88222404537747,
+    "lng": 29.735806465524362,
+    "accessible": true
+  },
+  {
+    "id": "b107",
+    "name": "Recreational Hall",
+    "code": "Recreational Hall",
+    "category": "recreation",
+    "type": "Recreational Activities Centre",
+    "lat": -23.88713811688047,
+    "lng": 29.737162734943166,
+    "accessible": true
+  },
+  {
+    "id": "b215",
+    "name": "Transport Section",
+    "code": "Transport Section",
+    "category": "recreation",
+    "type": "Transport services",
+    "lat": -23.889987082046385,
+    "lng": 29.73871209036626,
+    "accessible": true
+  },
+  {
+    "id": "b49",
+    "name": "UL GYM",
+    "code": "UL GYM",
+    "category": "recreation",
+    "type": "Recreational Services",
+    "lat": -23.890015236823682,
+    "lng": 29.735281346686975,
+    "accessible": true
+  },
+  {
+    "id": "b52",
+    "name": "UL GYM Extension",
+    "code": "UL GYM Extension",
+    "category": "recreation",
+    "type": "Recreational",
+    "lat": -23.889830951567237,
+    "lng": 29.73523460948774,
+    "accessible": true
+  },
+  {
+    "id": "b72",
+    "name": "VL Dining hall",
+    "code": "VL Dining hall",
+    "category": "recreation",
+    "type": "Recreational Services",
+    "lat": -23.884210553486664,
+    "lng": 29.734126359235432,
+    "accessible": true
+  },
+  {
+    "id": "b248",
+    "name": "House 19",
+    "code": "House 19",
+    "category": "commercial",
+    "type": "Commercial",
+    "lat": -23.895103744501426,
+    "lng": 29.739345356388473,
+    "accessible": true
+  },
+  {
+    "id": "b21",
+    "name": "MBA Shop",
+    "code": "MBA Shop",
+    "category": "commercial",
+    "type": "Commercical Services",
+    "lat": -23.889239234660185,
+    "lng": 29.73685105339223,
+    "accessible": true
+  },
+  {
+    "id": "b43",
+    "name": "MBJ Shop",
+    "code": "MBJ Shop",
+    "category": "commercial",
+    "type": "Commercial Services",
+    "lat": -23.891597255999518,
+    "lng": 29.73499332015892,
+    "accessible": true
+  },
+  {
+    "id": "b113",
+    "name": "Resturant",
+    "code": "Resturant",
+    "category": "commercial",
+    "type": "Commercial Services",
+    "lat": -23.88659723009071,
+    "lng": 29.737035043582768,
+    "accessible": true
+  },
+  {
+    "id": "b157",
+    "name": "Staff Restuarant",
+    "code": "Staff Restuarant",
+    "category": "commercial",
+    "type": "Commercial",
+    "lat": -23.888104818748022,
+    "lng": 29.738698753886233,
+    "accessible": true
+  },
+  {
+    "id": "b135",
+    "name": "Tsalas Shop",
+    "code": "Tsalas Shop",
+    "category": "commercial",
+    "type": "Commercial",
+    "lat": -23.88782050054008,
+    "lng": 29.737042386582004,
+    "accessible": true
+  },
+  {
+    "id": "b79",
+    "name": "VK Shop",
+    "code": "VK Shop",
+    "category": "commercial",
+    "type": "Commercial",
+    "lat": -23.884461700923243,
+    "lng": 29.734919770211967,
+    "accessible": true
+  },
+  {
+    "id": "b339",
+    "name": "Block 1 Parking",
+    "code": "Block 1 Parking",
+    "category": "parking",
+    "type": "Vehicles Parking",
+    "lat": -23.888909983990946,
+    "lng": 29.740901936540027,
+    "accessible": true
+  },
+  {
+    "id": "b337",
+    "name": "Block 2 Parking",
+    "code": "Block 2 Parking",
+    "category": "parking",
+    "type": "Vehicles Parking",
+    "lat": -23.889225471178527,
+    "lng": 29.741041623616137,
+    "accessible": true
+  },
+  {
+    "id": "b298",
+    "name": "Block 3 Parking",
+    "code": "Block 3 Parking",
+    "category": "parking",
+    "type": "Residence",
+    "lat": -23.890461477950225,
+    "lng": 29.74021860046333,
+    "accessible": true
+  },
+  {
+    "id": "b297",
+    "name": "Block 4 Parking",
+    "code": "Block 4 Parking",
+    "category": "parking",
+    "type": "Residence",
+    "lat": -23.89097395880869,
+    "lng": 29.74044875387539,
+    "accessible": true
+  },
+  {
+    "id": "b349",
+    "name": "Edu-Science Parking",
+    "code": "Edu-Science Parking",
+    "category": "parking",
+    "type": "Vehicles Parking",
+    "lat": -23.889053084582482,
+    "lng": 29.744209004452777,
+    "accessible": true
+  },
+  {
+    "id": "b70",
+    "name": "Parking 1",
+    "code": "Parking",
+    "category": "parking",
+    "type": "Car Parking",
+    "lat": -23.887621472572807,
+    "lng": 29.735087148883583,
+    "accessible": true
+  },
+  {
+    "id": "b202",
+    "name": "Parking 10",
+    "code": "Parking",
+    "category": "parking",
+    "type": "Support",
+    "lat": -23.887851928155605,
+    "lng": 29.7417515188362,
+    "accessible": true
+  },
+  {
+    "id": "b382",
+    "name": "Parking 17",
+    "code": "Parking",
+    "category": "parking",
+    "type": "Support",
+    "lat": -23.88351508818984,
+    "lng": 29.741682578090526,
+    "accessible": true
+  },
+  {
+    "id": "b396",
+    "name": "Parking 18",
+    "code": "Parking",
+    "category": "parking",
+    "type": "Support",
+    "lat": -23.884714863183326,
+    "lng": 29.74152424762981,
+    "accessible": true
+  },
+  {
+    "id": "b397",
+    "name": "Parking 19",
+    "code": "Parking",
+    "category": "parking",
+    "type": "Support",
+    "lat": -23.888443450066926,
+    "lng": 29.74230163881782,
+    "accessible": true
+  },
+  {
+    "id": "b104",
+    "name": "Parking 2",
+    "code": "Parking",
+    "category": "parking",
+    "type": "Vehicles Parking",
+    "lat": -23.886145194526513,
+    "lng": 29.737199501552105,
+    "accessible": true
+  },
+  {
+    "id": "b433",
+    "name": "Parking 20",
+    "code": "Parking",
+    "category": "parking",
+    "type": "Support",
+    "lat": -23.892066859530395,
+    "lng": 29.736507255145842,
+    "accessible": true
+  },
+  {
+    "id": "b114",
+    "name": "Parking 3",
+    "code": "Parking",
+    "category": "parking",
+    "type": "Vehicles  Parking",
+    "lat": -23.886353454490568,
+    "lng": 29.737013565900305,
+    "accessible": true
+  },
+  {
+    "id": "b137",
+    "name": "Parking 4",
+    "code": "Parking",
+    "category": "parking",
+    "type": "Support",
+    "lat": -23.887228336991406,
+    "lng": 29.73772169813882,
+    "accessible": true
+  },
+  {
+    "id": "b159",
+    "name": "Parking 5",
+    "code": "Parking",
+    "category": "parking",
+    "type": "Support",
+    "lat": -23.88761244668308,
+    "lng": 29.737864980867926,
+    "accessible": true
+  },
+  {
+    "id": "b164",
+    "name": "Parking 6",
+    "code": "Parking",
+    "category": "parking",
+    "type": "Support",
+    "lat": -23.88529025091389,
+    "lng": 29.739316480441357,
+    "accessible": true
+  },
+  {
+    "id": "b174",
+    "name": "Parking 7",
+    "code": "Parking",
+    "category": "parking",
+    "type": "Support",
+    "lat": -23.88740488296118,
+    "lng": 29.738835416840395,
+    "accessible": true
+  },
+  {
+    "id": "b180",
+    "name": "Parking 8",
+    "code": "Parking",
+    "category": "parking",
+    "type": "Support",
+    "lat": -23.888701804157265,
+    "lng": 29.739860083375504,
+    "accessible": true
+  },
+  {
+    "id": "b197",
+    "name": "Parking 9",
+    "code": "Parking",
+    "category": "parking",
+    "type": "Support",
+    "lat": -23.88606269439541,
+    "lng": 29.741394826911613,
+    "accessible": true
+  },
+  {
+    "id": "b234",
+    "name": "Technical Services Parking",
+    "code": "Technical Services Parking",
+    "category": "parking",
+    "type": "Support",
+    "lat": -23.889738643675276,
+    "lng": 29.739308765810858,
+    "accessible": true
+  }
+]
