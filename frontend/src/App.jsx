@@ -51,6 +51,7 @@ import {
   BarChart3,
   Plus,
   Lock,
+  QrCode,
   Footprints
 } from "lucide-react";
 import "./App.css";
@@ -275,6 +276,88 @@ function haversine(a, b) {
     Math.sin(dLat / 2) ** 2 +
     Math.cos(toRad(a[0])) * Math.cos(toRad(b[0])) * Math.sin(dLng / 2) ** 2;
   return 2 * R * Math.asin(Math.sqrt(x));
+}
+
+
+/**
+ * Given the full route path and the user's live position, return:
+ * - remainingCoords: path still ahead (starts at closest point on route)
+ * - remainingMeters: distance left along the route
+ * - traveledMeters: distance already covered along the route
+ * - closestIdx: index of nearest route point
+ */
+function routeProgressFromPosition(coords, userPos) {
+  if (!coords || coords.length < 2 || !userPos) {
+    return {
+      remainingCoords: coords || [],
+      remainingMeters: 0,
+      traveledMeters: 0,
+      closestIdx: 0
+    };
+  }
+
+  // Cumulative distance along the full path
+  const cum = [0];
+  for (let i = 1; i < coords.length; i++) {
+    cum.push(cum[i - 1] + haversine(coords[i - 1], coords[i]));
+  }
+  const totalLen = cum[cum.length - 1];
+
+  // Find nearest point on the path (vertex or projected onto a segment)
+  let bestD = Infinity;
+  let bestIdx = 0;
+  let bestAlong = 0; // distance along route of the closest point
+  let bestPoint = coords[0];
+
+  for (let i = 0; i < coords.length - 1; i++) {
+    const a = coords[i];
+    const b = coords[i + 1];
+    // Project user onto segment a→b in lat/lng space (good enough at campus scale)
+    const ax = a[1], ay = a[0], bx = b[1], by = b[0];
+    const px = userPos[1], py = userPos[0];
+    const abx = bx - ax, aby = by - ay;
+    const apx = px - ax, apy = py - ay;
+    const ab2 = abx * abx + aby * aby || 1e-12;
+    let t = (apx * abx + apy * aby) / ab2;
+    t = Math.max(0, Math.min(1, t));
+    const proj = [ay + t * (by - ay), ax + t * (bx - ax)];
+    const d = haversine(userPos, proj);
+    if (d < bestD) {
+      bestD = d;
+      bestIdx = i;
+      bestAlong = cum[i] + t * (cum[i + 1] - cum[i]);
+      bestPoint = proj;
+    }
+  }
+  // Also check last vertex
+  const dLast = haversine(userPos, coords[coords.length - 1]);
+  if (dLast < bestD) {
+    bestD = dLast;
+    bestIdx = coords.length - 1;
+    bestAlong = totalLen;
+    bestPoint = coords[coords.length - 1];
+  }
+
+  const remainingMeters = Math.max(0, totalLen - bestAlong);
+  // Remaining path: from closest point onward
+  const remainingCoords = [bestPoint, ...coords.slice(bestIdx + 1)];
+  // Avoid tiny duplicate if already on a vertex
+  if (
+    remainingCoords.length >= 2 &&
+    haversine(remainingCoords[0], remainingCoords[1]) < 1
+  ) {
+    remainingCoords.shift();
+  }
+  if (remainingCoords.length < 2) {
+    remainingCoords.push(coords[coords.length - 1]);
+  }
+
+  return {
+    remainingCoords,
+    remainingMeters: Math.round(remainingMeters),
+    traveledMeters: Math.round(bestAlong),
+    closestIdx: bestIdx
+  };
 }
 
 function isInsideCampus(latlng) {
@@ -811,6 +894,7 @@ function App() {
   }); // view | edit | register | login
   const [profileMessage, setProfileMessage] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [showQrPopup, setShowQrPopup] = useState(false);
 
   const emptyProfileForm = (role = "student") => ({
     role,
@@ -994,27 +1078,6 @@ function App() {
     } catch { /* ignore */ }
     document.documentElement.setAttribute("data-theme", theme);
   }, [theme]);
-
-  // Ensure a default admin account exists (sign-in only — no public registration)
-  useEffect(() => {
-    try {
-      const accounts = loadAccounts();
-      const key = accountKey("admin", "ADM001");
-      if (!accounts[key]) {
-        accounts[key] = {
-          role: "admin",
-          studentNumber: "ADM001",
-          fullName: "Campus Administrator",
-          email: "admin@ul.ac.za",
-          phone: "",
-          department: "Campus Services",
-          password: "Admin@2026",
-          registeredAt: new Date().toISOString()
-        };
-        localStorage.setItem("ul_nav_accounts", JSON.stringify(accounts));
-      }
-    } catch { /* ignore */ }
-  }, []);
 
   // Sync form only when navigating TO the profile view (not on every keystroke)
   const prevViewRef = useRef(view);
@@ -1201,16 +1264,12 @@ function App() {
   };
 
   const handleLogin = () => {
-    const role = profileForm.role === "admin" ? "admin" : "student";
+    const role = "student";
     const sn = (profileForm.studentNumber || "").trim().toUpperCase();
     const password = profileForm.password || "";
 
     if (!sn) {
-      setProfileMessage(
-        role === "admin"
-          ? "Enter your admin / staff ID to continue."
-          : "Enter your student number to continue."
-      );
+      setProfileMessage("Enter your student number to continue.");
       return;
     }
     if (!password) {
@@ -1238,26 +1297,20 @@ function App() {
     }
 
     if (!saved) {
-      setProfileMessage(
-        role === "admin"
-          ? "No administrator account found for this ID. Please register."
-          : "No student account found for this number. Please register."
-      );
+      setProfileMessage("No student account found for this number. Please register.");
       setProfileMode("register");
       return;
     }
 
-    // Legacy accounts without password: allow setting password on first login attempt only if empty
     if (saved.password) {
       if (saved.password !== password) {
         setProfileMessage("Incorrect password. Please try again.");
         return;
       }
     } else {
-      // Force re-register message for old accounts without password
       if (!isStrongPassword(password)) {
         setProfileMessage(
-          "This account has no password yet. Register again or set a strong password by creating a new account."
+          "This account has no password yet. Use a strong password (8+ characters with upper, lower, number, and special character)."
         );
         return;
       }
@@ -1268,21 +1321,15 @@ function App() {
     setUserProfile(saved);
     setProfileMode("view");
     setProfileForm((f) => ({ ...f, password: "", confirmPassword: "" }));
-    if (role === "admin") {
-      setProfileMessage("Welcome back, Administrator!");
-      setView("admin");
-      setAdminTab("overview");
-    } else {
-      setAppStats((s) => ({
-        ...s,
-        studentLogins: [
-          ...(s.studentLogins || []),
-          { id: sn, name: saved.fullName || sn, at: new Date().toISOString(), type: "login" }
-        ]
-      }));
-      setProfileMessage("Welcome back!");
-      setView("map");
-    }
+    setAppStats((s) => ({
+      ...s,
+      studentLogins: [
+        ...(s.studentLogins || []),
+        { id: sn, name: saved.fullName || sn, at: new Date().toISOString(), type: "login" }
+      ]
+    }));
+    setProfileMessage("Welcome back!");
+    setView("map");
   };
 
   const handleSaveProfile = () => {
@@ -1621,24 +1668,24 @@ function App() {
     arrivedTriggeredRef.current = false;
   };
 
-  // Detect when user is near destination — only then show "I've arrived"
+  // Detect when user is near destination — use remaining route distance when possible
   useEffect(() => {
     if (!isNavigating || !route?.to || !userPos) {
       if (!isNavigating) setNearDestination(false);
       return;
     }
-    const toLat = route.to.lat;
-    const toLng = route.to.lng;
-    if (toLat == null || toLng == null) return;
-    const R = 6371000;
-    const toRad = (d) => (d * Math.PI) / 180;
-    const dLat = toRad(toLat - userPos[0]);
-    const dLng = toRad(toLng - userPos[1]);
-    const a =
-      Math.sin(dLat / 2) ** 2 +
-      Math.cos(toRad(userPos[0])) * Math.cos(toRad(toLat)) * Math.sin(dLng / 2) ** 2;
-    const dist = 2 * R * Math.asin(Math.sqrt(a));
-    setNearDestination(dist <= 45);
+    let near = false;
+    if (route.coords?.length > 1) {
+      const { remainingMeters } = routeProgressFromPosition(route.coords, userPos);
+      near = remainingMeters <= 40;
+    } else {
+      const toLat = route.to.lat;
+      const toLng = route.to.lng;
+      if (toLat != null && toLng != null) {
+        near = haversine(userPos, [toLat, toLng]) <= 45;
+      }
+    }
+    setNearDestination(near);
   }, [userPos, isNavigating, route]);
 
   // Must stay above any early returns (auth landing, etc.) — Rules of Hooks
@@ -1923,167 +1970,56 @@ function App() {
         </div>
       )}
 
-      {!userProfile && (profileMode === "login" || profileMode === "register") && (
+      {!userProfile && (
         <div className="profile-auth">
           <div className="panel-hero profile-auth-hero">
             <div className="panel-hero-icon profile">
-              {profileForm.role === "admin" ? <Settings size={24} strokeWidth={2.2} /> : <User size={24} strokeWidth={2.2} />}
+              <User size={24} strokeWidth={2.2} />
             </div>
             <div className="panel-hero-text">
-              <h3>
-                {profileMode === "login"
-                  ? profileForm.role === "admin"
-                    ? "Admin sign in"
-                    : "Student sign in"
-                  : profileForm.role === "admin"
-                    ? "Register as admin"
-                    : "Register as student"}
-              </h3>
-              <p>
-                {profileMode === "login"
-                  ? profileForm.role === "admin"
-                    ? "Sign in with your University of Limpopo admin / staff ID."
-                    : "Sign in with your University of Limpopo student number."
-                  : profileForm.role === "admin"
-                    ? "Create an administrator account to manage campus navigation."
-                    : "Create a student account for campus navigation."}
-              </p>
+              <h3>Student sign in</h3>
+              <p>Sign in with your University of Limpopo student number.</p>
             </div>
-          </div>
-
-          <div className="role-toggle" role="tablist" aria-label="Account type">
-            <button
-              type="button"
-              role="tab"
-              className={`role-toggle-btn ${profileForm.role === "student" ? "active" : ""}`}
-              onClick={() => {
-                setProfileForm((f) => ({ ...f, role: "student" }));
-                setProfileMessage("");
-              }}
-            >
-              <GraduationCap size={16} />
-              Student
-            </button>
-            <button
-              type="button"
-              role="tab"
-              className={`role-toggle-btn ${profileForm.role === "admin" ? "active" : ""}`}
-              onClick={() => {
-                setProfileForm((f) => ({ ...f, role: "admin" }));
-                setProfileMessage("");
-              }}
-            >
-              <Settings size={16} />
-              Administrator
-            </button>
           </div>
 
           <div className="profile-form-card">
             <div className="form-group">
               <label>
                 <IdCard size={14} />
-                {profileForm.role === "admin" ? "Admin / staff ID" : "Student number"}
+                Student number
               </label>
               <input
                 type="text"
-                placeholder={profileForm.role === "admin" ? "e.g. ADM001 or staff ID" : "e.g. 202012345"}
+                placeholder="e.g. 202012345"
                 value={profileForm.studentNumber}
                 onChange={(e) => setProfileForm((f) => ({ ...f, studentNumber: e.target.value }))}
                 autoCapitalize="characters"
               />
             </div>
 
-            {profileMode === "register" && (
-              <>
-                <div className="form-group">
-                  <label><User size={14} /> Full name</label>
-                  <input
-                    type="text"
-                    placeholder="Your full name"
-                    value={profileForm.fullName}
-                    onChange={(e) => setProfileForm((f) => ({ ...f, fullName: e.target.value }))}
-                  />
-                </div>
-                <div className="form-group">
-                  <label><Mail size={14} /> Email (optional)</label>
-                  <input
-                    type="email"
-                    placeholder="name@ul.ac.za"
-                    value={profileForm.email}
-                    onChange={(e) => setProfileForm((f) => ({ ...f, email: e.target.value }))}
-                  />
-                </div>
-                <div className="form-group">
-                  <label><Phone size={14} /> Phone (optional)</label>
-                  <input
-                    type="tel"
-                    placeholder="0XX XXX XXXX"
-                    value={profileForm.phone}
-                    onChange={(e) => setProfileForm((f) => ({ ...f, phone: e.target.value }))}
-                  />
-                </div>
-                {profileForm.role === "student" ? (
-                  <>
-                    <div className="form-group">
-                      <label><GraduationCap size={14} /> Faculty (optional)</label>
-                      <input
-                        type="text"
-                        placeholder="e.g. Science & Agriculture"
-                        value={profileForm.faculty}
-                        onChange={(e) => setProfileForm((f) => ({ ...f, faculty: e.target.value }))}
-                      />
-                    </div>
-                    <div className="form-group">
-                      <label>Year of study (optional)</label>
-                      <input
-                        type="text"
-                        placeholder="e.g. 2"
-                        value={profileForm.yearOfStudy}
-                        onChange={(e) => setProfileForm((f) => ({ ...f, yearOfStudy: e.target.value }))}
-                      />
-                    </div>
-                  </>
-                ) : (
-                  <div className="form-group">
-                    <label><Users size={14} /> Department (optional)</label>
-                    <input
-                      type="text"
-                      placeholder="e.g. Campus Services / ICT"
-                      value={profileForm.department}
-                      onChange={(e) => setProfileForm((f) => ({ ...f, department: e.target.value }))}
-                    />
-                  </div>
-                )}
-              </>
-            )}
+            <div className="form-group">
+              <label><Lock size={14} /> Password</label>
+              <input
+                type={showPassword ? "text" : "password"}
+                placeholder="Your password"
+                value={profileForm.password}
+                onChange={(e) => setProfileForm((f) => ({ ...f, password: e.target.value }))}
+                autoComplete="current-password"
+              />
+            </div>
 
-            {profileMode === "login" ? (
-              <>
-                <button type="button" className="btn-primary full" onClick={handleLogin}>
-                  {profileForm.role === "admin" ? "Sign in as administrator" : "Sign in as student"}
-                </button>
-                <button
-                  type="button"
-                  className="text-btn profile-switch"
-                  onClick={() => { setProfileMode("register"); setProfileMessage(""); }}
-                >
-                  Don&apos;t have an account? Register
-                </button>
-              </>
-            ) : (
-              <>
-                <button type="button" className="btn-primary full" onClick={handleRegister}>
-                  {profileForm.role === "admin" ? "Create administrator account" : "Create student account"}
-                </button>
-                <button
-                  type="button"
-                  className="text-btn profile-switch"
-                  onClick={() => { setProfileMode("login"); setProfileMessage(""); }}
-                >
-                  Already registered? Sign in
-                </button>
-              </>
-            )}
+            <label className="show-password-row">
+              <input
+                type="checkbox"
+                checked={showPassword}
+                onChange={(e) => setShowPassword(e.target.checked)}
+              />
+              Show password
+            </label>
+
+            <button type="button" className="btn-primary full" onClick={handleLogin}>
+              Sign in as student
+            </button>
           </div>
 
           <button type="button" className="btn-outline full profile-settings-btn" onClick={() => setShowSettings(true)}>
@@ -2145,11 +2081,6 @@ function App() {
             )}
           </div>
           <div className="profile-actions modern">
-            {userProfile.role === "admin" && (
-              <button type="button" className="btn-primary" onClick={() => { setView("admin"); setAdminTab("overview"); }}>
-                <LayoutDashboard size={16} /> Admin dashboard
-              </button>
-            )}
             <button type="button" className="btn-primary" onClick={() => setProfileMode("edit")}>
               <Edit3 size={16} /> Edit profile
             </button>
@@ -2598,10 +2529,12 @@ function App() {
 
   // ========== AUTH LANDING (required before map) ==========
   if (!userProfile) {
-    const role = profileForm.role === "admin" ? "admin" : profileForm.role === "guest" ? "guest" : "student";
-    // Admin is sign-in only (no public registration)
-    const isLogin = role === "admin" || profileMode !== "register";
+    const role = profileForm.role === "guest" ? "guest" : "student";
     const isGuest = role === "guest";
+    const isLogin = profileMode !== "register";
+    // Production app URL — QR always opens the live site (login/register if no account)
+    const appUrl = "https://ul-campus-nav.vercel.app/";
+    const qrSrc = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(appUrl)}&bgcolor=ffffff&color=1B2642&margin=8`;
 
     return (
       <div className="auth-landing" data-theme={theme}>
@@ -2616,13 +2549,14 @@ function App() {
             </div>
           </div>
 
-          <div className="role-toggle auth-role-toggle three" role="tablist" aria-label="Account type">
+          <div className="role-toggle auth-role-toggle" role="tablist" aria-label="Account type">
             <button
               type="button"
               role="tab"
               className={`role-toggle-btn ${role === "student" ? "active" : ""}`}
               onClick={() => {
                 setProfileForm((f) => ({ ...f, role: "student" }));
+                setProfileMode("login");
                 setProfileMessage("");
               }}
             >
@@ -2635,29 +2569,16 @@ function App() {
               className={`role-toggle-btn ${role === "guest" ? "active" : ""}`}
               onClick={() => {
                 setProfileForm((f) => ({ ...f, role: "guest" }));
-                setProfileMode("register");
+                setProfileMode("login");
                 setProfileMessage("");
               }}
             >
               <User size={15} />
               Guest
             </button>
-            <button
-              type="button"
-              role="tab"
-              className={`role-toggle-btn ${role === "admin" ? "active" : ""}`}
-              onClick={() => {
-                setProfileForm((f) => ({ ...f, role: "admin" }));
-                setProfileMode("login");
-                setProfileMessage("");
-              }}
-            >
-              <Settings size={15} />
-              Admin
-            </button>
           </div>
 
-          {!isGuest && role !== "admin" && (
+          {!isGuest && (
             <div className="auth-mode-toggle">
               <button
                 type="button"
@@ -2722,11 +2643,11 @@ function App() {
                 <div className="form-group">
                   <label>
                     <IdCard size={14} />
-                    {role === "admin" ? "Admin / staff ID" : "Student number"}
+                    Student number
                   </label>
                   <input
                     type="text"
-                    placeholder={role === "admin" ? "e.g. ADM001" : "e.g. 202012345"}
+                    placeholder="e.g. 202012345"
                     value={profileForm.studentNumber}
                     onChange={(e) => setProfileForm((f) => ({ ...f, studentNumber: e.target.value }))}
                     autoCapitalize="characters"
@@ -2734,7 +2655,7 @@ function App() {
                   />
                 </div>
 
-                {!isLogin && role === "student" && (
+                {!isLogin && (
                   <>
                     <div className="form-group">
                       <label><User size={14} /> Full name</label>
@@ -2795,7 +2716,7 @@ function App() {
                   />
                 </div>
 
-                {!isLogin && role === "student" && (
+                {!isLogin && (
                   <>
                     <div className="form-group">
                       <label><Lock size={14} /> Confirm password</label>
@@ -2824,7 +2745,7 @@ function App() {
 
                 {isLogin ? (
                   <button type="button" className="btn-primary full auth-submit" onClick={handleLogin}>
-                    {role === "admin" ? "Sign in as administrator" : "Sign in as student"}
+                    Sign in as student
                   </button>
                 ) : (
                   <button type="button" className="btn-primary full auth-submit" onClick={handleRegister}>
@@ -2835,7 +2756,49 @@ function App() {
             )}
           </div>
 
+          <button
+            type="button"
+            className="auth-qr-trigger"
+            onClick={() => setShowQrPopup(true)}
+          >
+            <QrCode size={16} aria-hidden="true" />
+            Click here for QR code
+          </button>
+        </div>
+
+        {showQrPopup && (
+          <div
+            className="auth-qr-modal-overlay"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Campus Navigator QR code"
+            onClick={() => setShowQrPopup(false)}
+          >
+            <div
+              className="auth-qr-modal"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <button
+                type="button"
+                className="auth-qr-modal-close"
+                onClick={() => setShowQrPopup(false)}
+                aria-label="Close"
+              >
+                <X size={20} />
+              </button>
+              <div className="auth-qr-modal-title">
+                <QrCode size={20} aria-hidden="true" />
+                <strong>Scan to open</strong>
+              </div>
+              <p className="auth-qr-modal-hint">
+                Point your phone camera at this QR code to launch Campus Navigator
+              </p>
+              <div className="auth-qr-frame auth-qr-frame-modal">
+                <img src={qrSrc} alt="QR code to open Campus Navigator" width={180} height={180} />
+              </div>
+            </div>
           </div>
+        )}
       </div>
     );
   }
@@ -2852,6 +2815,26 @@ function App() {
       if (m >= 1000) return `${(m / 1000).toFixed(m >= 10000 ? 0 : 1)} km`;
       return `${Math.round(m)} m`;
     };
+
+    // Live progress: remaining path, distance and time shrink as you move
+    const progress = routeProgressFromPosition(route.coords, userPos);
+    const remainDist =
+      userPos && route.coords?.length > 1
+        ? progress.remainingMeters
+        : route.totalDistance || 0;
+    const speedMPerMin = route.travelMode === "driving" ? 400 : 80;
+    const remainTime = Math.max(
+      1,
+      Math.round(remainDist / speedMPerMin)
+    );
+    // If essentially arrived, show 0
+    const displayDist = remainDist <= 15 ? 0 : remainDist;
+    const displayTime = remainDist <= 15 ? 0 : remainTime;
+    const remainingPath =
+      userPos && progress.remainingCoords?.length > 1
+        ? progress.remainingCoords
+        : route.coords;
+
     const fromLabel =
       useLiveAsFrom && userPos
         ? "Your location"
@@ -2866,7 +2849,7 @@ function App() {
         : route.mode === "outside"
           ? "Real roads"
           : "Route");
-    const arrivalStr = new Date(Date.now() + (route.totalTime || 0) * 60000).toLocaleTimeString([], {
+    const arrivalStr = new Date(Date.now() + displayTime * 60000).toLocaleTimeString([], {
       hour: "2-digit",
       minute: "2-digit"
     });
@@ -2894,8 +2877,18 @@ function App() {
           <MapContainer center={getFromLatLng()} zoom={18} style={{ height: "100%", width: "100%" }} zoomControl={false}>
             <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" attribution="&copy; OpenStreetMap" />
             {buildingsGeo && <GeoJSON data={buildingsGeo} style={buildingStyle} />}
-            {route.coords?.length > 1 && (
-              <Polyline positions={route.coords} color={ROUTE_BLUE} weight={7} opacity={0.95} />
+            {/* Faded trail for the part already walked */}
+            {userPos && route.coords?.length > 1 && progress.closestIdx > 0 && (
+              <Polyline
+                positions={route.coords.slice(0, progress.closestIdx + 1)}
+                color="#94a3b8"
+                weight={5}
+                opacity={0.45}
+              />
+            )}
+            {/* Blue line = remaining path only — shrinks as you move */}
+            {remainingPath?.length > 1 && (
+              <Polyline positions={remainingPath} color={ROUTE_BLUE} weight={7} opacity={0.95} />
             )}
             {userPos && (
               <Marker
@@ -2926,19 +2919,19 @@ function App() {
           </div>
         </div>
 
-        {/* LEFT side: distance */}
+        {/* LEFT side: remaining distance (updates as you move) */}
         <div className="nav-side-panel left">
           <div className="nav-side-card">
-            <strong>{formatDist(route.totalDistance)}</strong>
-            <span>Distance</span>
+            <strong>{formatDist(displayDist)}</strong>
+            <span>Left</span>
           </div>
         </div>
 
-        {/* RIGHT side: time + arrival */}
+        {/* RIGHT side: remaining time + arrival */}
         <div className="nav-side-panel right">
           <div className="nav-side-card">
-            <strong>{route.totalTime ?? "—"} min</strong>
-            <span>Time</span>
+            <strong>{displayTime === 0 ? "0" : displayTime} min</strong>
+            <span>Left</span>
           </div>
           <div className="nav-side-card subtle">
             <strong>{arrivalStr}</strong>
