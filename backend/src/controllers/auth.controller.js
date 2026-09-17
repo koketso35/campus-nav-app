@@ -151,10 +151,9 @@ const me = async (req, res) => {
 const logout = async (req, res) => {
   try {
     const token = req.headers.authorization.split(' ')[1];
-    await authService.logout(token);
+    await authService.logout(token, req.profile?.id);
     return successResponse(res, null, 'Logged out');
   } catch (error) {
-    // Even if Supabase fails, client should just drop the token
     return successResponse(res, null, 'Logged out');
   }
 };

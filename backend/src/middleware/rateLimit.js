@@ -1,62 +1,99 @@
-// src/middleware/rateLimit.js
+
 const rateLimit = require('express-rate-limit');
 const { ipKeyGenerator } = require('express-rate-limit');
 
-/**
- * Login: 5 attempts per 15 minutes per IP + per student number.
- */
+const clientIp = (req) =>
+  ipKeyGenerator(req.ip || req.socket?.remoteAddress || 'unknown');
+
+// ---------- LOGIN ----------
+// Keyed by student number (or email). NEVER by IP.
+// A shared campus IP can no longer lock out other students.
 const loginLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000,
-  max: 5,
+  windowMs: 3 * 60 * 1000,
+  max: 3,
   standardHeaders: true,
   legacyHeaders: false,
-  keyGenerator: (req, res) => {
-    // ipKeyGenerator normalizes IPv6 addresses (e.g. ::1 → ::/64 block)
-    const ip = ipKeyGenerator(req.ip || req.connection?.remoteAddress || 'unknown');
-    const sn = (req.body?.studentNumber || 'unknown').toString().toUpperCase();
-    return `${ip}:${sn}`;
+  skipSuccessfulRequests: true,
+  keyGenerator: (req) => {
+    const sn = (req.body?.studentNumber || '').toString().trim().toUpperCase();
+    const email = (req.body?.email || '').toString().trim().toLowerCase();
+    return `login:${sn || email || clientIp(req)}`;
   },
-  handler: (req, res) => {
+  handler: (req, res) =>
     res.status(429).json({
       success: false,
-      message: 'Too many login attempts. Please wait 15 minutes and try again.',
+      message: 'Too many login attempts for this account. Please wait 3 minutes.',
       timestamp: new Date().toISOString(),
-    });
-  },
+    }),
 });
 
-/**
- * Register: prevent mass account creation from one IP.
- */
-const registerLimiter = rateLimit({
-  windowMs: 60 * 60 * 1000,
-  max: 5,
+// ---------- REGISTER ----------
+// Identity limiter: per email
+const registerIdentityLimiter = rateLimit({
+  windowMs: 5 * 60 * 1000,
+  max: 3,
   standardHeaders: true,
   legacyHeaders: false,
-  handler: (req, res) => {
+  keyGenerator: (req) =>
+    `register:email:${(req.body?.email || '').toString().trim().toLowerCase() || clientIp(req)}`,
+  handler: (req, res) =>
     res.status(429).json({
       success: false,
-      message: 'Too many registrations from this network. Please try again later.',
+      message: 'Too many registration attempts for this email.',
       timestamp: new Date().toISOString(),
-    });
-  },
+    }),
 });
 
-/**
- * Guest: prevent mass guest creation.
- */
-const guestLimiter = rateLimit({
-  windowMs: 60 * 60 * 1000,
-  max: 10,
+// Network backstop: per IP, but HIGH ceiling so a campus NAT never trips it
+const registerNetworkLimiter = rateLimit({
+  windowMs: 5 * 60 * 1000,
+  max: 3,                   
   standardHeaders: true,
   legacyHeaders: false,
-  handler: (req, res) => {
+  keyGenerator: (req) => `register:net:${clientIp(req)}`,
+  handler: (req, res) =>
     res.status(429).json({
       success: false,
-      message: 'Too many guest sessions created from this network. Please try again later.',
+      message: 'This network has made too many registration requests. Please contact support.',
       timestamp: new Date().toISOString(),
-    });
-  },
+    }),
 });
 
-module.exports = { loginLimiter, registerLimiter, guestLimiter };
+// ---------- GUEST ----------
+const guestIdentityLimiter = rateLimit({
+  windowMs: 5 * 60 * 1000,
+  max: 3,
+  standardHeaders: true,
+  legacyHeaders: false,
+  keyGenerator: (req) => {
+    const email = (req.body?.email || '').toString().trim().toLowerCase();
+    const phone = (req.body?.phone || '').toString().replace(/\D/g, '');
+    return `guest:id:${email || phone || clientIp(req)}`;
+  },
+  handler: (req, res) =>
+    res.status(429).json({
+      success: false,
+      message: 'Too many guest sessions for this contact.',
+      timestamp: new Date().toISOString(),
+    }),
+});
+
+const guestNetworkLimiter = rateLimit({
+  windowMs: 5 * 60 * 1000,
+  max: 3,
+  standardHeaders: true,
+  legacyHeaders: false,
+  keyGenerator: (req) => `guest:net:${clientIp(req)}`,
+  handler: (req, res) =>
+    res.status(429).json({
+      success: false,
+      message: 'This network has made too many guest requests. Please contact support.',
+      timestamp: new Date().toISOString(),
+    }),
+});
+
+module.exports = {
+  loginLimiter,
+  registerLimiters: [registerIdentityLimiter, registerNetworkLimiter],
+  guestLimiters:    [guestIdentityLimiter, guestNetworkLimiter],
+};

@@ -24,10 +24,10 @@ const environment = {
   //jwtSecret: process.env.JWT_SECRET,
 
   // Rate limiting
-  rateLimit: {
+  /* rateLimit: {
     windowMs: parseInt(process.env.RATE_LIMIT_WINDOW_MS || '900000', 10),
-    maxRequests: parseInt(process.env.RATE_LIMIT_MAX_REQUESTS || '100', 10),
-  },
+    maxRequests: parseInt(process.env.RATE_LIMIT_MAX_REQUESTS || '5000', 10),
+  }, */
 };
 
 // Validate required environment variables

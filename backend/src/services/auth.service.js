@@ -40,7 +40,7 @@ const registerStudent = async ({ studentNumber, fullName, email, phone, password
  * - Synthetic email so Supabase Auth can create the user
  * - Random strong password (never shown to user)
  * - Profile row with role='guest'
- * - Immediately signed in → returns real JWT
+ * - Immediately signed in returns real JWT
  */
 
 const registerGuest = async ({ fullName, phone, email }) => {
@@ -98,6 +98,14 @@ const registerGuest = async ({ fullName, phone, email }) => {
     email: syntheticEmail,
     password: randomPassword,
   });
+  const nowIso = new Date().toISOString();
+  await supabaseAdmin
+    .from('profiles')
+    .update({ last_login_at: nowIso })
+    .eq('id', authData.user.id);
+
+  profile.last_login_at = nowIso;
+
   if (signInError) throw signInError;
 
   return {
@@ -113,6 +121,14 @@ const registerGuest = async ({ fullName, phone, email }) => {
 const login = async ({ email, password }) => {
   const { data, error } = await supabase.auth.signInWithPassword({ email, password });
   if (error) throw error;
+
+  const nowIso = new Date().toISOString();
+  await supabaseAdmin
+    .from('profiles')
+    .update({ last_login_at: nowIso })
+    .eq('id', data.user.id);
+
+  profile.last_login_at = nowIso;
 
   // Get profile
   const { data: profile, error: profileError } = await supabaseAdmin
@@ -198,6 +214,15 @@ const loginByStudentNumber = async ({ studentNumber, password, ip }) => {
     password,
   });
 
+  // last login logic
+  const nowIso = new Date().toISOString();
+  await supabaseAdmin
+    .from('profiles')
+    .update({ last_login_at: nowIso })
+    .eq('id', data.user.id);
+
+  profile.last_login_at = nowIso;
+
   if (error) {
     const code = error.code || '';
     const msg = (error.message || '').toLowerCase();
@@ -249,9 +274,16 @@ const getProfileById = async (userId) => {
 /**
  * Sign out (revoke session)
  */
-const logout = async (accessToken) => {
+const logout = async (accessToken, userId) => {
   const { error } = await supabaseAdmin.auth.admin.signOut(accessToken);
   if (error) throw error;
+
+  if (userId) {
+    await supabaseAdmin
+      .from('profiles')
+      .update({ last_logout_at: new Date().toISOString() })
+      .eq('id', userId);
+  }
   return true;
 };
 
