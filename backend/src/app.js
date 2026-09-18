@@ -46,26 +46,6 @@ if (environment.isDevelopment) {
   app.use(morgan('combined'));
 }
 
-// ---------- GLOBAL API LIMITER ----------
-// Only throttles writes, and with a ceiling high enough for a whole campus
-// behind one NAT. Auth routes have their own, tighter limiters.
-/* const globalApiLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000,
-  max: 5000,                                      
-  standardHeaders: true,
-  legacyHeaders: false,
-  skip: (req) => req.method === 'GET',         
-  keyGenerator: (req) =>
-    ipKeyGenerator(req.ip || req.socket?.remoteAddress || 'unknown'),
-  message: {
-    success: false,
-    message: 'Too many requests, please try again later.',
-  },
-});
-app.use('/api', globalApiLimiter);
- */
-
-
 // Routes
 app.use('/', routes);
 
