@@ -6,6 +6,7 @@ const placesRoutes = require('./places.routes');
 const authRoutes = require('./auth.routes');
 const profileRoutes = require('./profile.routes');
 const eventsRoutes = require('./events.routes');
+const feedbackRoutes = require('./feedback.routes');
 
 // Health check endpoint
 router.get('/health', (req, res) => {
@@ -20,11 +21,11 @@ router.get('/health', (req, res) => {
 const API_VERSION = '/api/v1';
 
 // Mount routes
-// Mount routes
 router.use(`${API_VERSION}/places`, placesRoutes);
 router.use(`${API_VERSION}/auth`, authRoutes);
 router.use(`${API_VERSION}/events`, eventsRoutes);
 router.use(`${API_VERSION}/profile`, profileRoutes);
+router.use(`${API_VERSION}/feedback`, feedbackRoutes);
 // Add more routes here...
 
 module.exports = router;

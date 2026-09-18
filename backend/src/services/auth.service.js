@@ -257,6 +257,41 @@ const loginByStudentNumber = async ({ studentNumber, password, ip }) => {
   };
 };
 
+/**
+ * Request password reset:
+ * - Accepts student number and/or email
+ * - Resolves student number to profile email
+ * - Sends reset email when a target email can be resolved
+ * - Returns a neutral response if account is not found
+ */
+const forgotPassword = async ({ studentNumber, email, resetRedirectTo }) => {
+  const cleanStudentNumber = String(studentNumber || '').trim().toUpperCase();
+  const cleanEmail = String(email || '').trim().toLowerCase();
+
+  let targetEmail = cleanEmail || null;
+
+  if (!targetEmail && cleanStudentNumber) {
+    const { data: profile, error: lookupError } = await supabaseAdmin
+      .from('profiles')
+      .select('email')
+      .eq('student_number', cleanStudentNumber)
+      .eq('role', 'student')
+      .maybeSingle();
+
+    if (lookupError) throw lookupError;
+    targetEmail = profile?.email ? String(profile.email).trim().toLowerCase() : null;
+  }
+
+  if (!targetEmail) {
+    return { dispatched: false };
+  }
+
+  const options = resetRedirectTo ? { redirectTo: resetRedirectTo } : undefined;
+  const { error: resetError } = await supabase.auth.resetPasswordForEmail(targetEmail, options);
+
+  if (resetError) throw resetError;
+  return { dispatched: true };
+};
 
 /**
  * Get current user's profile by their auth ID
@@ -287,4 +322,4 @@ const logout = async (accessToken, userId) => {
   return true;
 };
 
-module.exports = { registerStudent, registerGuest, login, loginByStudentNumber, getProfileById, logout };
+module.exports = { registerStudent, registerGuest, login, loginByStudentNumber, forgotPassword, getProfileById, logout };

@@ -5,12 +5,13 @@ const { authenticateUser } = require('../middleware/auth');
 const {
   loginLimiter,
   registerLimiters,
-  guestLimiters,
+  guestLimiters, forgotPasswordLimiter
 } = require('../middleware/rateLimit');
 
 // ---------- PUBLIC (rate limited) ----------
 router.post('/register', registerLimiters, authController.register);
 router.post('/guest',    guestLimiters,    authController.guest);
+router.post('/forgot-password', forgotPasswordLimiter, authController.forgotPassword);
 router.post('/login',    loginLimiter,     authController.login);
 
 // ---------- AUTHENTICATED ----------

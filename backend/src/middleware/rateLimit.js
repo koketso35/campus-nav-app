@@ -92,8 +92,32 @@ const guestNetworkLimiter = rateLimit({
     }),
 });
 
+/**
+ * Forgot password: limit repeated reset requests.
+ */
+const forgotPasswordLimiter = rateLimit({
+  windowMs: 5 * 60 * 1000,
+  max: 5,
+  standardHeaders: true,
+  legacyHeaders: false,
+  keyGenerator: (req) => {
+    const ip = ipKeyGenerator(req.ip || req.connection?.remoteAddress || 'unknown');
+    const email = (req.body?.email || '').toString().trim().toLowerCase();
+    const sn = (req.body?.studentNumber || '').toString().trim().toUpperCase();
+    return `${ip}:${email || sn || 'unknown'}`;
+  },
+  handler: (req, res) => {
+    res.status(429).json({
+      success: false,
+      message: 'Too many password reset requests. Please wait and try again.',
+      timestamp: new Date().toISOString(),
+    });
+  },
+});
+
 module.exports = {
   loginLimiter,
   registerLimiters: [registerIdentityLimiter, registerNetworkLimiter],
   guestLimiters:    [guestIdentityLimiter, guestNetworkLimiter],
+  forgotPasswordLimiter
 };
