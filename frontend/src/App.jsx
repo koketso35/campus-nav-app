@@ -908,6 +908,10 @@ function App() {
   const [showPassword, setShowPassword] = useState(false);
   const [showQrPopup, setShowQrPopup] = useState(false);
   const [bootstrapping, setBootstrapping] = useState(() => !!getToken());
+  const [pageLoading, setPageLoading] = useState(false);
+  const pageLoadingTimer = useRef(null);
+  const previousViewForLoading = useRef(view);
+  const [activeRouteId, setActiveRouteId] = useState(null);
 
   const emptyProfileForm = (role = "student") => ({
     role,
@@ -921,6 +925,49 @@ function App() {
     password: "",
     confirmPassword: ""
   });
+  /*-- SPLASH LOGIC SCREEN  --*/ 
+  const showPageLoadingSplash = useCallback(async (promiseOrMs, delayMs = 250, minVisibleMs = 200) => {
+    if (pageLoadingTimer.current) {
+      clearTimeout(pageLoadingTimer.current);
+      pageLoadingTimer.current = null;
+    }
+
+    let splashVisible = false;
+    const showTimer = setTimeout(() => {
+      splashVisible = true;
+      setPageLoading(true);
+    }, delayMs);
+
+    const startedAt = Date.now();
+
+    try {
+      if (promiseOrMs && typeof promiseOrMs.then === "function") {
+        await promiseOrMs;
+      } else {
+        const ms = typeof promiseOrMs === "number" ? promiseOrMs : 0;
+        if (ms > 0) await new Promise((r) => setTimeout(r, ms));
+      }
+    } catch {
+      // Swallow — caller handles
+    }
+
+    clearTimeout(showTimer);
+
+    if (!splashVisible) {
+      return; // never showed — nothing to hide
+    }
+
+    // If visible, enforce minimum visible duration to avoid flicker
+    const visibleFor = Date.now() - (startedAt + delayMs);
+    const remaining = Math.max(0, minVisibleMs - visibleFor);
+    if (remaining > 0) {
+      await new Promise((resolve) => {
+        pageLoadingTimer.current = setTimeout(resolve, remaining);
+      });
+    }
+
+    setPageLoading(false);
+  }, []);
 
   const isStrongPassword = (pwd) => {
     if (!pwd || pwd.length < 8) return false;
@@ -967,6 +1014,13 @@ function App() {
       localStorage.setItem("ul_nav_accounts", JSON.stringify(accounts));
     } catch { /* ignore */ }
   };
+
+  useEffect(() => {
+    // Pre-warm free-tier backend (fire-and-forget)
+    fetch(`${import.meta.env.VITE_API_URL || "http://localhost:3000"}/health`, {
+      method: "GET",
+    }).catch(() => {});
+  }, []);
 
   useEffect(() => {
     const onResize = () => setIsMobile(window.innerWidth < 768);
@@ -1102,6 +1156,71 @@ function App() {
     setProfileMessage("");
   }, [view, userProfile]);
 
+  /* ---- SPLASH LOADING ----- */
+  // Load data for the new view before hiding the splash
+  useEffect(() => {
+    if (bootstrapping) return;
+
+    const previousView = previousViewForLoading.current;
+    if (previousView === view) return;
+
+    let loadPromise = null;
+
+    if (view === "events") {
+      loadPromise = api.getEvents({ upcoming: true, limit: 100 })
+        .then((res) => setCampusEvents(res.data || []))
+        .catch((err) => {
+          console.warn('[events] Failed to load:', err.message);
+          setCampusEvents([]);
+        });
+    }
+
+    if (view === "favourites") {
+      loadPromise = api.getFavourites()
+        .then((res) => {
+          setFavourites(
+            (res.data || []).map((p) => p.slug || p.id).filter(Boolean)
+          );
+        })
+        .catch((err) => {
+          console.warn('[favourites] Failed to load:', err.message);
+        });
+    }
+
+    if (view === "profile") {
+      loadPromise = Promise.all([
+        api.getProfile().catch((err) => {
+          console.warn('[profile] Failed to load:', err.message);
+          return null;
+        }),
+        api.getFavourites().catch(() => ({ data: [] })),
+      ]).then(([profileRes, favRes]) => {
+        if (profileRes?.data) setUserProfile(profileRes.data);
+        if (favRes?.data) {
+          setFavourites(
+            (favRes.data || []).map((p) => p.slug || p.id).filter(Boolean)
+          );
+        }
+      });
+    }
+
+    // For heavy views (map, route) — no data to fetch, but render cost is high.
+    // Give them a minimum splash duration so the user sees feedback.
+    if (view === "map" || view === "route") {
+      loadPromise = new Promise((resolve) => setTimeout(resolve, 400));
+    }
+
+    previousViewForLoading.current = view;
+
+    if (loadPromise) {
+      showPageLoadingSplash(loadPromise);
+    }
+  }, [view, bootstrapping, showPageLoadingSplash]);
+
+  useEffect(() => () => {
+    if (pageLoadingTimer.current) clearTimeout(pageLoadingTimer.current);
+  }, []);
+
   // RESTORE SESSION PROFILE FROM TOKEN ON APP LOAD
   useEffect(() => {
     const token = getToken();
@@ -1189,17 +1308,18 @@ function App() {
       return;
     }
 
-    try {
+    const guestPromise = (async () => {
       const res = await api.guest({ fullName, phone, email });
       setToken(res.data.accessToken);
       setUserProfile(res.data.profile);
-
-      // Guests start with no favourites, but keep the flow consistent
       setFavourites([]);
-
       setProfileMode("view");
       setProfileMessage("Welcome, guest!");
       setView("map");
+    })();
+
+    try {
+      await showPageLoadingSplash(guestPromise, 380);
     } catch (err) {
       setProfileMessage(err.message || "Could not start guest session. Please try again.");
     }
@@ -1241,18 +1361,19 @@ function App() {
       return;
     }
 
-    try {
-      await api.register({
-        studentNumber: sn,
-        fullName,
-        email,
-        phone,
-        password,
-        confirmPassword,
-        faculty: profileForm.faculty || "",
-        yearOfStudy: profileForm.yearOfStudy || "",
-      });
+    const registerPromise = api.register({
+      studentNumber: sn,
+      fullName,
+      email,
+      phone,
+      password,
+      confirmPassword,
+      faculty: profileForm.faculty || "",
+      yearOfStudy: profileForm.yearOfStudy || "",
+    });
 
+    try {
+      await showPageLoadingSplash(registerPromise, 380);
       setProfileMessage("Account created. Login to continue.");
       setProfileMode("login");
       setProfileForm((f) => ({ ...f, password: "", confirmPassword: "" }));
@@ -1280,11 +1401,10 @@ function App() {
       return;
     }
 
-    try {
+    const loginPromise = (async () => {
       const res = await api.login({ studentNumber: sn, password });
       setToken(res.data.accessToken);
 
-      // Fetch the freshest profile and favourites together
       const [profileRes, favRes] = await Promise.all([
         api.me(),
         api.getFavourites(),
@@ -1292,14 +1412,16 @@ function App() {
 
       setUserProfile(profileRes.data);
       setFavourites(
-        (favRes.data || [])
-          .map((p) => p.slug || p.id)
-          .filter(Boolean)
+        (favRes.data || []).map((p) => p.slug || p.id).filter(Boolean)
       );
       setProfileMode("view");
       setView("map");
       setProfileMessage("Welcome back!");
       setProfileForm((f) => ({ ...f, password: "" }));
+    })();
+
+    try {
+      await showPageLoadingSplash(loginPromise, 380);
     } catch (err) {
       if (err.status === 401) {
         setProfileMessage("Incorrect student number or password.");
@@ -1308,6 +1430,39 @@ function App() {
       } else {
         setProfileMessage(err.message || "Login failed. Please try again.");
       }
+    }
+  };
+  // FORGOT PASSWORD HANDLER — backend integrated
+  const handleForgotPassword = async () => {
+    const sn = (profileForm.studentNumber || "").trim().toUpperCase();
+    const email = (profileForm.email || "").trim().toLowerCase();
+
+    if (!sn && !email) {
+      setProfileMessage("Enter your student number or email address.");
+      return;
+    }
+    if (sn && !isValidStudentNumber(sn)) {
+      setProfileMessage("Enter a valid student number.");
+      return;
+    }
+    if (email && !isValidEmail(email)) {
+      setProfileMessage("Enter a valid email address.");
+      return;
+    }
+
+    const forgotPromise = api.forgotPassword({
+      studentNumber: sn || undefined,
+      email: email || undefined,
+      resetRedirectTo: typeof window !== "undefined" ? window.location.origin : undefined,
+    });
+
+    try {
+      await showPageLoadingSplash(forgotPromise, 380);
+      setProfileMessage("If an account exists, reset instructions have been sent.");
+      setProfileMode("login");
+      setProfileForm((f) => ({ ...f, password: "", confirmPassword: "" }));
+    } catch (err) {
+      setProfileMessage(err.message || "Could not process your request. Please try again.");
     }
   };
 
@@ -1351,16 +1506,15 @@ function App() {
     }
   };
 
-  // LOGOUT HANDLER  backend integrated
-  const handleLogout = async () => {
-    try {
-      await api.logout();
-    } catch {
-      // Ignore errors on logout
-    }
+  // LOGOUT HANDLER — instant logout, server revocation in background
+  const handleLogout = () => {
+    // Revoke server session in background (don't await)
+    api.logout().catch(() => {});
+
+    // Local cleanup — instant
     clearToken();
     setUserProfile(null);
-    setFavourites([]);       
+    setFavourites([]);
     setProfileForm(emptyProfileForm("student"));
     setProfileMode("login");
     setProfileMessage("You have been signed out.");
@@ -1378,12 +1532,10 @@ function App() {
   const submitRating = (forcedValue = null, forcedComplaint = null) => {
     const value = forcedValue != null ? forcedValue : ratingValue;
     const complaintText = forcedComplaint != null ? forcedComplaint : ratingComplaint;
-    if (!value) {
-      return;
-    }
-    if (value < 2 && !(complaintText || "").trim()) {
-      return;
-    }
+
+    if (!value) return;
+    if (value < 2 && !(complaintText || "").trim()) return;
+
     const entry = {
       id: `fb-${Date.now()}`,
       rating: value,
@@ -1393,13 +1545,28 @@ function App() {
       userId: userProfile?.studentNumber || "guest",
       userName: userProfile?.fullName || "Guest",
       userRole: userProfile?.role || "guest",
-      at: new Date().toISOString()
+      at: new Date().toISOString(),
     };
+
+    // 1. Update local state instantly — modal closes, entry appears
     setUserFeedback((prev) => [entry, ...prev].slice(0, 200));
     setShowRating(false);
     setRatingValue(0);
     setRatingComplaint("");
     setRatingRouteInfo(null);
+
+    // 2. Fire-and-forget: send to backend (don't block the UI)
+    api.submitFeedback({
+      rating: value,
+      complaint: entry.complaint || null,
+      category: 'routing',
+    }).catch((err) => {
+      console.warn('[feedback] Failed to save:', err.message);
+      // Mark local entry as unsynced so admin knows it isn't on the server
+      setUserFeedback((prev) =>
+        prev.map((f) => (f.id === entry.id ? { ...f, unsynced: true } : f))
+      );
+    });
   };
 
   const handleStarSelect = (n) => {
@@ -1410,12 +1577,21 @@ function App() {
   };
 
   const completeNavigationArrived = () => {
+    // Mark route as completed on the backend (fire and forget)
+    if (activeRouteId) {
+      api.completeRoute(activeRouteId).catch((err) =>
+        console.warn('[routes] Failed to complete:', err.message)
+      );
+      setActiveRouteId(null);
+    }
+
     const info = route
       ? {
           from: route.from?.name || (useLiveAsFrom ? "Live location" : "Start"),
-          to: route.to?.name || "Destination"
+          to: route.to?.name || "Destination",
         }
       : null;
+
     setIsNavigating(false);
     setNavStep(0);
     setView("map");
@@ -1423,6 +1599,7 @@ function App() {
     arrivedTriggeredRef.current = false;
     setNearDestination(false);
     openRatingPrompt(info);
+
     setTimeout(() => {
       setRoute(null);
       setSelectedPlace(null);
@@ -1583,6 +1760,30 @@ function App() {
   const startNavigation = () => {
     if (!route && !toPlace) return;
     const mode = travelMode || route?.travelMode;
+
+    // Persist route history in the background
+    if (userProfile && route) {
+      api
+        .saveRoute({
+          fromPlaceId: fromPlace?.id || null,
+          toPlaceId: toPlace?.id || null,
+          fromLatitude: route.from?.lat ?? getFromLatLng()[0],
+          fromLongitude: route.from?.lng ?? getFromLatLng()[1],
+          toLatitude: route.to.lat,
+          toLongitude: route.to.lng,
+          routeMode: route.mode || "campus",
+          totalDistanceMeters: route.totalDistance || 0,
+          totalTimeMinutes: route.totalTime || 0,
+          routeCoords: route.coords || [],
+          routeSteps: route.steps || null,
+          isAccessible: !!route.accessible,
+        })
+        .then((res) => {
+          if (res?.data?.id) setActiveRouteId(res.data.id);
+        })
+        .catch((err) => console.warn("[routes] Failed to save:", err.message));
+    }
+
     if (mode && route) {
       setIsNavigating(true);
       setNavStep(0);
@@ -1593,6 +1794,7 @@ function App() {
       setNearDestination(false);
       return;
     }
+
     setPendingNavPlace(toPlace || route?.to || null);
     setModePromptIntent("navigate");
     setShowModeBeforeNav(true);
@@ -2058,10 +2260,69 @@ function App() {
               <User size={24} strokeWidth={2.2} />
             </div>
             <div className="panel-hero-text">
-              <h3>Student sign in</h3>
-              <p>Sign in with your University of Limpopo student number.</p>
+              <h3>{profileMode === "forgot" ? "Forgot password" : "Student sign in"}</h3>
+              <p>
+                {profileMode === "forgot"
+                  ? "Enter your student number or email to receive reset instructions."
+                  : "Sign in with your University of Limpopo student number."}
+              </p>
             </div>
           </div>
+          {profileMode === "forgot" ? (
+            <>
+              <div className="form-group">
+                <label>
+                  <IdCard size={14} />
+                  Student number
+                </label>
+                <input
+                  type="text"
+                  placeholder="e.g. 202012345"
+                  value={profileForm.studentNumber}
+                  onChange={(e) => setProfileForm((f) => ({ ...f, studentNumber: e.target.value }))}
+                  autoCapitalize="characters"
+                />
+              </div>
+              <div className="form-group">
+                <label><Mail size={14} /> Email address</label>
+                <input
+                  type="email"
+                  placeholder="name@ul.ac.za"
+                  value={profileForm.email}
+                  onChange={(e) => setProfileForm((f) => ({ ...f, email: e.target.value }))}
+                />
+              </div>
+              <button type="button" className="btn-primary full" onClick={handleForgotPassword}>
+                Send reset instructions
+              </button>
+              <button
+                type="button"
+                className="auth-text-link profile-forgot-link"
+                onClick={() => {
+                  setProfileMode("login");
+                  setProfileMessage("");
+                }}
+              >
+                Back to sign in
+              </button>
+            </>
+          ) : (
+            <>
+              <div className="form-group">
+                <label>
+                  <IdCard size={14} />
+                  Student number
+                </label>
+                <input
+                  type="text"
+                  placeholder="e.g. 202012345"
+                  value={profileForm.studentNumber}
+                  onChange={(e) => setProfileForm((f) => ({ ...f, studentNumber: e.target.value }))}
+                  autoCapitalize="characters"
+                />
+              </div>
+            </>)
+          }	
 
           <div className="profile-form-card">
             <div className="form-group">
@@ -2619,6 +2880,21 @@ function App() {
     );
   };
 
+  const renderPageLoadingOverlay = (label = "Loading page…") => (
+    pageLoading ? (
+      <div className="app-loading-splash" data-theme={theme} role="status" aria-live="polite" aria-label={label}>
+        <div className="app-loading-splash-bg" aria-hidden="true" />
+        <div className="app-loading-splash-card">
+          <img src="/ul-logo.jpeg" alt="University of Limpopo" className="auth-logo" />
+          <div className="auth-uni">University of Limpopo</div>
+          <h2 className="auth-title">Campus Navigator</h2>
+          <div className="routing-spinner app-loading-spinner" />
+          <p className="app-loading-text">{label}</p>
+        </div>
+      </div>
+    ) : null
+  );
+
   // While we're restoring the session, show a neutral splash (avoids auth flash)
   if (bootstrapping) {
     return (
@@ -2642,7 +2918,9 @@ function App() {
   if (!userProfile) {
     const role = profileForm.role === "guest" ? "guest" : "student";
     const isGuest = role === "guest";
-    const isLogin = profileMode !== "register";
+    const isLogin = profileMode === "login";
+    const isRegister = profileMode === "register";
+    const isForgot = profileMode === "forgot";
     const appUrl = "https://ul-campus-nav.vercel.app/";
     const qrSrc = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(appUrl)}&bgcolor=ffffff&color=1B2642&margin=8`;
 
@@ -2699,7 +2977,7 @@ function App() {
               </button>
               <button
                 type="button"
-                className={!isLogin ? "active" : ""}
+                className={isRegister ? "active" : ""}
                 onClick={() => { setProfileMode("register"); setProfileMessage(""); }}
               >
                 Register
@@ -2758,34 +3036,28 @@ function App() {
               </>
             ) : (
               <>
-                <div className="form-group">
-                  <label>
-                    <IdCard size={14} />
-                    Student number
-                  </label>
-                  <input
-                    type="text"
-                    placeholder="e.g. 202012345"
-                    value={profileForm.studentNumber}
-                    onChange={(e) => setProfileForm((f) => ({ ...f, studentNumber: e.target.value }))}
-                    autoCapitalize="characters"
-                    autoFocus
-                  />
-                </div>
-
-                {!isLogin && (
-                  <>
+                {isForgot ? (
+                  <div className="forgot-password-panel">
+                    <h3>Forgot password</h3>
+                    <p className="forgot-password-hint">
+                      Enter your student number or email address to receive reset instructions.
+                    </p>
                     <div className="form-group">
-                      <label><User size={14} /> Full name</label>
+                      <label>
+                        <IdCard size={14} />
+                        Student number
+                      </label>
                       <input
                         type="text"
-                        placeholder="e.g. Thabo Molefe"
-                        value={profileForm.fullName}
-                        onChange={(e) => setProfileForm((f) => ({ ...f, fullName: e.target.value }))}
+                        placeholder="e.g. 202012345"
+                        value={profileForm.studentNumber}
+                        onChange={(e) => setProfileForm((f) => ({ ...f, studentNumber: e.target.value }))}
+                        autoCapitalize="characters"
+                        autoFocus
                       />
                     </div>
                     <div className="form-group">
-                      <label><Mail size={14} /> Email</label>
+                      <label><Mail size={14} /> Email address</label>
                       <input
                         type="email"
                         placeholder="name@ul.ac.za"
@@ -2793,82 +3065,147 @@ function App() {
                         onChange={(e) => setProfileForm((f) => ({ ...f, email: e.target.value }))}
                       />
                     </div>
-                    <div className="form-group">
-                      <label><Phone size={14} /> Phone (optional)</label>
-                      <input
-                        type="tel"
-                        placeholder="0XX XXX XXXX"
-                        value={profileForm.phone}
-                        onChange={(e) => setProfileForm((f) => ({ ...f, phone: e.target.value }))}
-                      />
-                    </div>
-                    <div className="form-group">
-                      <label><GraduationCap size={14} /> Faculty (optional)</label>
-                      <input
-                        type="text"
-                        placeholder="e.g. Science & Agriculture"
-                        value={profileForm.faculty}
-                        onChange={(e) => setProfileForm((f) => ({ ...f, faculty: e.target.value }))}
-                      />
-                    </div>
-                    <div className="form-group">
-                      <label>Year of study (optional)</label>
-                      <input
-                        type="text"
-                        placeholder="1 – 6"
-                        value={profileForm.yearOfStudy}
-                        onChange={(e) => setProfileForm((f) => ({ ...f, yearOfStudy: e.target.value }))}
-                      />
-                    </div>
-                  </>
-                )}
-
-                <div className="form-group">
-                  <label><Lock size={14} /> Password</label>
-                  <input
-                    type={showPassword ? "text" : "password"}
-                    placeholder={isLogin ? "Your password" : "Create a strong password"}
-                    value={profileForm.password}
-                    onChange={(e) => setProfileForm((f) => ({ ...f, password: e.target.value }))}
-                    autoComplete={isLogin ? "current-password" : "new-password"}
-                  />
-                </div>
-
-                {!isLogin && ( 
+                    <button type="button" className="btn-primary full auth-submit" onClick={handleForgotPassword}>
+                      Send reset instructions
+                    </button>
+                    <button
+                      type="button"
+                      className="auth-text-link"
+                      onClick={() => {
+                        setProfileMode("login");
+                        setProfileMessage("");
+                      }}
+                    >
+                      Back to sign in
+                    </button>
+                  </div>
+                ) : (
                   <>
                     <div className="form-group">
-                      <label><Lock size={14} /> Confirm password</label>
+                      <label>
+                        <IdCard size={14} />
+                        Student number
+                      </label>
                       <input
-                        type={showPassword ? "text" : "password"}
-                        placeholder="Re-enter password"
-                        value={profileForm.confirmPassword}
-                        onChange={(e) => setProfileForm((f) => ({ ...f, confirmPassword: e.target.value }))}
-                        autoComplete="new-password"
+                        type="text"
+                        placeholder="e.g. 202012345"
+                        value={profileForm.studentNumber}
+                        onChange={(e) => setProfileForm((f) => ({ ...f, studentNumber: e.target.value }))}
+                        autoCapitalize="characters"
+                        autoFocus
                       />
                     </div>
-                    <p className="password-hint">
-                      Use 8+ characters with uppercase, lowercase, a number, and a special character (e.g. Campus@2026).
-                    </p>
+
+                    {isRegister && (
+                      <>
+                        <div className="form-group">
+                          <label><User size={14} /> Full name</label>
+                          <input
+                            type="text"
+                            placeholder="e.g. Thabo Molefe"
+                            value={profileForm.fullName}
+                            onChange={(e) => setProfileForm((f) => ({ ...f, fullName: e.target.value }))}
+                          />
+                        </div>
+                        <div className="form-group">
+                          <label><Mail size={14} /> Email</label>
+                          <input
+                            type="email"
+                            placeholder="name@ul.ac.za"
+                            value={profileForm.email}
+                            onChange={(e) => setProfileForm((f) => ({ ...f, email: e.target.value }))}
+                          />
+                        </div>
+                        <div className="form-group">
+                          <label><Phone size={14} /> Phone (optional)</label>
+                          <input
+                            type="tel"
+                            placeholder="0XX XXX XXXX"
+                            value={profileForm.phone}
+                            onChange={(e) => setProfileForm((f) => ({ ...f, phone: e.target.value }))}
+                          />
+                        </div>
+                        <div className="form-group">
+                          <label><GraduationCap size={14} /> Faculty (optional)</label>
+                          <input
+                            type="text"
+                            placeholder="e.g. Science & Agriculture"
+                            value={profileForm.faculty}
+                            onChange={(e) => setProfileForm((f) => ({ ...f, faculty: e.target.value }))}
+                          />
+                        </div>
+                        <div className="form-group">
+                          <label>Year of study (optional)</label>
+                          <input
+                            type="text"
+                            placeholder="1 – 6"
+                            value={profileForm.yearOfStudy}
+                            onChange={(e) => setProfileForm((f) => ({ ...f, yearOfStudy: e.target.value }))}
+                          />
+                        </div>
+                      </>
+                    )}
+
+                    <div className="form-group">
+                      <label><Lock size={14} /> Password</label>
+                      <input
+                        type={showPassword ? "text" : "password"}
+                        placeholder={isLogin ? "Your password" : "Create a strong password"}
+                        value={profileForm.password}
+                        onChange={(e) => setProfileForm((f) => ({ ...f, password: e.target.value }))}
+                        autoComplete={isLogin ? "current-password" : "new-password"}
+                      />
+                    </div>
+
+                    {isRegister && (
+                      <>
+                        <div className="form-group">
+                          <label><Lock size={14} /> Confirm password</label>
+                          <input
+                            type={showPassword ? "text" : "password"}
+                            placeholder="Re-enter password"
+                            value={profileForm.confirmPassword}
+                            onChange={(e) => setProfileForm((f) => ({ ...f, confirmPassword: e.target.value }))}
+                            autoComplete="new-password"
+                          />
+                        </div>
+                        <p className="password-hint">
+                          Use 8+ characters with uppercase, lowercase, a number, and a special character (e.g. Campus@2026).
+                        </p>
+                      </>
+                    )}
+
+                    <label className="show-password-row">
+                      <input
+                        type="checkbox"
+                        checked={showPassword}
+                        onChange={(e) => setShowPassword(e.target.checked)}
+                      />
+                      Show password
+                    </label>
+
+                    {isLogin ? (
+                      <>
+                        <button type="button" className="btn-primary full auth-submit" onClick={handleLogin}>
+                          Sign in as student
+                        </button>
+                        <button
+                          type="button"
+                          className="auth-text-link"
+                          onClick={() => {
+                            setProfileMode("forgot");
+                            setProfileMessage("");
+                          }}
+                        >
+                          Forgot password?
+                        </button>
+                      </>
+                    ) : (
+                      <button type="button" className="btn-primary full auth-submit" onClick={handleRegister}>
+                        Create student account
+                      </button>
+                    )}
                   </>
-                )}
-
-                <label className="show-password-row">
-                  <input
-                    type="checkbox"
-                    checked={showPassword}
-                    onChange={(e) => setShowPassword(e.target.checked)}
-                  />
-                  Show password
-                </label>
-
-                {isLogin ? (
-                  <button type="button" className="btn-primary full auth-submit" onClick={handleLogin}>
-                    Sign in as student
-                  </button>
-                ) : (
-                  <button type="button" className="btn-primary full auth-submit" onClick={handleRegister}>
-                    Create student account
-                  </button>
                 )}
               </>
             )}
@@ -2917,6 +3254,7 @@ function App() {
             </div>
           </div>
         )}
+        {renderPageLoadingOverlay("Loading page…")}
       </div>
     );
   }
@@ -3433,6 +3771,7 @@ function App() {
           )}
         </div>
         {renderRatingModal()}
+        {renderPageLoadingOverlay("Loading page…")}
       </div>
     );
   }
@@ -3476,6 +3815,7 @@ function App() {
         {renderBottomNav("search")}
         {renderSettingsModal()}
         {renderModeBeforeNavModal()}
+        {renderPageLoadingOverlay("Loading page…")}
       </div>
     );
   }
@@ -3494,6 +3834,7 @@ function App() {
         {renderBottomNav("events")}
         {renderSettingsModal()}
         {renderModeBeforeNavModal()}
+        {renderPageLoadingOverlay("Loading page…")}
       </div>
     );
   }
@@ -3513,6 +3854,7 @@ function App() {
         {renderBottomNav("map")}
         {renderSettingsModal()}
         {renderModeBeforeNavModal()}
+        {renderPageLoadingOverlay("Loading page…")}
       </div>
     );
   }
@@ -3531,6 +3873,7 @@ function App() {
         {renderBottomNav("profile")}
         {renderSettingsModal()}
         {renderModeBeforeNavModal()}
+        {renderPageLoadingOverlay("Loading page…")}
       </div>
     );
   }
@@ -3705,6 +4048,7 @@ function App() {
         {renderBottomNav("route")}
         {renderSettingsModal()}
         {renderModeBeforeNavModal()}
+        {renderPageLoadingOverlay("Loading page…")}
       </div>
     );
   }
@@ -4027,7 +4371,7 @@ function App() {
                       <div className="step-instruction">{s.instruction}</div>
                       {s.distance > 0 && <div className="step-dist">{s.distance} m</div>}
                     </div>
-                  </div>
+                  </div>  
                 ))}
               </div>
             )}
@@ -4055,6 +4399,7 @@ function App() {
         {renderSettingsModal()}
         {renderModeBeforeNavModal()}
         {renderRatingModal()}
+        {renderPageLoadingOverlay("Loading page…")}
       </main>
     </div>
   );

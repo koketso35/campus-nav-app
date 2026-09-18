@@ -1,5 +1,5 @@
-//const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
-const API_URL = 'https://campus-nav-app.onrender.com';
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+//const API_URL = 'https://campus-nav-app.onrender.com';
 const TOKEN_KEY = 'ul_nav_token';
 
 export const getToken = () => localStorage.getItem(TOKEN_KEY);
@@ -96,6 +96,10 @@ export const api = {
       ...res,
       data: { ...res.data, profile: mapProfileFromApi(res.data.profile) },
     })),
+  forgotPassword: (body) => apiFetch('/api/v1/auth/forgot-password', {
+    method: 'POST',
+    body: JSON.stringify(body),
+  }),
   guest: (body) => apiFetch('/api/v1/auth/guest', { method: 'POST', body: JSON.stringify(body) })
     .then((res) => ({
       ...res,
@@ -157,6 +161,26 @@ export const api = {
     data: mapEventFromApi(res.data),
   })),
   deleteEvent: (id) => apiFetch(`/api/v1/events/${id}`, { method: 'DELETE' }),
+  // Feedback
+  submitFeedback: (body) => apiFetch('/api/v1/feedback', {
+    method: 'POST',
+    body: JSON.stringify(body),
+  }),
+  getMyFeedback: (params = {}) => {
+    const qs = new URLSearchParams(
+      Object.entries(params).filter(([, v]) => v !== undefined && v !== null && v !== '')
+    ).toString();
+    return apiFetch(`/api/v1/feedback${qs ? `?${qs}` : ''}`);
+  },
+  deleteFeedback: (id) => apiFetch(`/api/v1/feedback/${id}`, { method: 'DELETE' }),
+  
+  //navigation
+  saveRoute: (body) => apiFetch('/api/v1/routes', { method: 'POST', body: JSON.stringify(body) }),
+  completeRoute: (id) => apiFetch(`/api/v1/routes/${id}/complete`, { method: 'POST' }),
+  getMyRoutes: (params = {}) => {
+    const qs = new URLSearchParams(Object.entries(params).filter(([, v]) => v != null && v !== '')).toString();
+    return apiFetch(`/api/v1/routes${qs ? `?${qs}` : ''}`);
+  },
 };
 
 export {mapProfileFromApi, mapEventFromApi, mapEventToApi};

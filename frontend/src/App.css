@@ -3869,6 +3869,34 @@ button.stat:hover {
 .auth-submit {
   margin-top: 6px;
 }
+/* Forgot password */
+.auth-text-link {
+  margin: 10px auto 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  color: var(--ul-navy);
+  font-size: 13px;
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.profile-forgot-link {
+  width: 100%;
+}
+.forgot-password-panel h3 {
+  margin: 0 0 8px;
+  font-size: 17px;
+  color: var(--ul-navy);
+}
+.forgot-password-hint {
+  margin: 0 0 12px;
+  font-size: 12px;
+  line-height: 1.45;
+  color: #64748b;
+}
+/*----------*/
 .auth-qr-trigger {
   display: flex;
   align-items: center;
@@ -3971,6 +3999,43 @@ button.stat:hover {
   color: #94a3b8;
   text-align: center;
 }
+
+/*  loading splash */
+.app-loading-splash {
+  position: fixed;
+  inset: 0;
+  z-index: 12000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+.app-loading-splash-bg {
+  position: absolute;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.52);
+  backdrop-filter: blur(4px);
+}
+.app-loading-splash-card {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 320px;
+  padding: 22px 20px;
+  border-radius: 18px;
+  background: #fff;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
+  text-align: center;
+}
+.app-loading-spinner {
+  margin: 14px auto 0;
+}
+.app-loading-text {
+  margin: 8px 0 0;
+  font-size: 13px;
+  color: #64748b;
+}
+
 .auth-landing .profile-msg {
   margin: 0 0 12px;
 }
@@ -4545,7 +4610,21 @@ button.stat:hover {
 [data-theme="dark"] .auth-uni {
   color: var(--text) !important;
 }
-
+/* Forgot password - theme */
+[data-theme="dark"] .auth-text-link {
+  color: #e2e8f0;
+}
+[data-theme="dark"] .forgot-password-panel h3 {
+  color: #f1f5f9;
+}
+[data-theme="dark"] .forgot-password-hint,
+[data-theme="dark"] .app-loading-text {
+  color: #cbd5e1;
+}
+[data-theme="dark"] .app-loading-splash-card {
+  background: #1e293b;
+}
+/*-----*/
 [data-theme="dark"] .auth-tagline {
   color: var(--text-muted) !important;
 }
