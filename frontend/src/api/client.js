@@ -1,5 +1,5 @@
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
-//const API_URL = 'https://campus-nav-app.onrender.com';
+//const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+const API_URL = 'https://campus-nav-app.onrender.com';
 const TOKEN_KEY = 'ul_nav_token';
 
 export const getToken = () => localStorage.getItem(TOKEN_KEY);
