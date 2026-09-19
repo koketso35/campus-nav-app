@@ -27,7 +27,7 @@ app.use(cors({
     'http://localhost:5173',
     'http://localhost:5174',
     'https://campus-nav-app-henna.vercel.app',
-    'https://nav-mu-three.vercel.app'
+    'https://nav-wheat-xi.vercel.app',
   ],
   credentials: true,
 }));
